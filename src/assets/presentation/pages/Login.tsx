@@ -1,8 +1,9 @@
 // src/presentation/pages/Auth/LoginPage.tsx
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 import FormInput from '../components/FormInput';
 import Button from '../components/Button';
+import { isValidEmail } from '../../../shared/utils/validators';
 
 export function LoginPage() {
     const [email, setEmail] = useState('');
@@ -12,6 +13,10 @@ export function LoginPage() {
         e.preventDefault();
         console.log({ email, password });
     };
+
+    useEffect(() => {
+        console.log(isValidEmail(email));
+    }, [email]);
 
     return (
         <div className="login-page w-full h-screen flex flex-col justify-center items-center bg-gradient-to-br from-[#667eea] to-[#764ba2]">
@@ -29,6 +34,8 @@ export function LoginPage() {
                         type="email" 
                         id="email"
                         value={email}
+                        validator={email !== '' && !isValidEmail(email)}
+                        message='E-mail inválido ou não cadastrado.'
                         onChange={(e) => setEmail(e.target.value)}
                         required
                     />
@@ -36,6 +43,7 @@ export function LoginPage() {
                         label="Senha"
                         type="password"
                         id="password"
+                        validator={false}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
