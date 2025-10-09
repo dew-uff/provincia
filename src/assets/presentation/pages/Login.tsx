@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import FormInput from '../components/FormInput';
+import Button from '../components/Button';
 
 export function LoginPage() {
     const [email, setEmail] = useState('');
@@ -39,6 +40,14 @@ export function LoginPage() {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
+
+                    <Button 
+                        type="submit"
+                        disabled={!email || !password}
+                        className="w-full"
+                    >
+                        Entrar
+                    </Button>
                 </form>
             </div>
         </div>
