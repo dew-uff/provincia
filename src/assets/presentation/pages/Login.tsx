@@ -1,6 +1,7 @@
 // src/presentation/pages/Auth/LoginPage.tsx
 import { useState } from 'react';
 import type { FormEvent } from 'react';
+import FormInput from '../components/FormInput';
 
 export function LoginPage() {
     const [email, setEmail] = useState('');
@@ -17,33 +18,27 @@ export function LoginPage() {
                 <h2 className='text-[#2563EB] mb-2 text-3xl font-bold'>ProvInCia</h2>
                 <p className='text-[#6B7280] text-[0.875rem] mb-9'>Provenance in Smart Cities</p>
                 {/* TODO: */}
-                    {/* - Componentizar formulário */}
-                        {/* - Criar componentes para cada campo de entrada */}
-                        {/* - Criar componente para o botão */}
-                    {/* - Adicionar validação de campos                 */}
+                    {/* - (X)Componentizar formulário */}
+                        {/* - (X) Criar componentes para cada campo de entrada */}
+                        {/* - () Criar componente para o botão */}
+                    {/* - () Adicionar validação de campos                 */}
                 <form className='w-[100%]' onSubmit={handleSubmit}>
-                    <div className='flex flex-col w-[100%]'>
-                        <label className='mb-2 font-medium text-[0.875rem] text-[#1F2937]' htmlFor="email">Email:</label>
-                        <input
-                            className='border-2 border-gray-200 p-2 transition-border duration-300 ease-in-out focus:border-[#2563EB] focus:outline-none rounded-md mb-4 w-[100%]' 
-                            type="email" 
-                            id="email" 
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="password">Senha:</label>
-                        <input 
-                            type="password" 
-                            id="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <button type="submit">Entrar</button>
+                    <FormInput 
+                        label="Email"
+                        type="email" 
+                        id="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                    <FormInput
+                        label="Senha"
+                        type="password"
+                        id="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
                 </form>
             </div>
         </div>
