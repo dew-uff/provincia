@@ -49,6 +49,8 @@ export function LoginPage() {
                         Entrar
                     </Button>
                 </form>
+                <a href="#" className='mt-4 text-[#2563EB] text-sm'>Esqueceu a senha?</a>
+                <p className='mt-7 text-sm text-[#6B7280]'>Não possui conta? <a href="#" className='text-[#2563EB]'>Ver documentação</a></p>
             </div>
         </div>
     );
