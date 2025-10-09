@@ -1,9 +1,8 @@
-// src/presentation/pages/Auth/LoginPage.tsx
 import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 import FormInput from '../components/FormInput';
 import Button from '../components/Button';
-import { isValidEmail } from '../../../shared/utils/validators';
+import { isValidEmail } from '../../shared/utils/validators';
 
 export function LoginPage() {
     const [email, setEmail] = useState('');
@@ -24,10 +23,7 @@ export function LoginPage() {
                 <h2 className='text-[#2563EB] mb-2 text-3xl font-bold'>ProvInCia</h2>
                 <p className='text-[#6B7280] text-[0.875rem] mb-9'>Provenance in Smart Cities</p>
                 {/* TODO: */}
-                    {/* - (X)Componentizar formulário */}
-                        {/* - (X) Criar componentes para cada campo de entrada */}
-                        {/* - (x) Criar componente para o botão */}
-                    {/* - () Adicionar validação de campos                 */}
+                    {/* - () Criar rotas de autenticação */}
                 <form className='w-[100%]' onSubmit={handleSubmit}>
                     <FormInput 
                         label="Email"

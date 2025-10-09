@@ -1,9 +1,9 @@
-import { LoginPage } from './assets/presentation/pages/Login'
+import Dashboard from './presentation/pages/Dashboard'
 
 function App() {
 
   return (
-    <LoginPage/ >
+    <Dashboard/ >
   )
 }
 
