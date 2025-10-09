@@ -44,7 +44,7 @@ export function LoginPage() {
                     <Button 
                         type="submit"
                         disabled={!email || !password}
-                        className="w-full"
+                        className="w-full mt-2"
                     >
                         Entrar
                     </Button>
