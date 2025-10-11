@@ -1,18 +1,40 @@
 import { useEffect, useState } from 'react';
-import type { FormEvent } from 'react';
+import type { LocationState } from '../../shared/types/auth';
 import FormInput from '../components/FormInput';
 import Button from '../components/Button';
 import { isValidEmail } from '../../shared/utils/validators';
+import { useAuth } from '../../application/hooks/useAuth';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+
 
 
 
 export function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    const { login } = useAuth();
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const from = (location.state as LocationState)?.from?.pathname || '/dashboard';
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log({ email, password });
+        setError('');
+        setIsLoading(true);
+
+        try {
+            await login({ email, password });
+            navigate(from, { replace: true });
+        } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : 'Erro ao fazer login');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     useEffect(() => {
@@ -26,7 +48,12 @@ export function LoginPage() {
                 <p className='text-[#6B7280] text-[0.875rem] mb-9'>Provenance in Smart Cities</p>
                 {/* TODO: */}
                     {/* - () Criar rotas de autenticação */}
-                <form className='w-[100%]' onSubmit={handleSubmit}>
+                {error && (
+                    <div className="w-full mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+                        {error}
+                    </div>
+                )}
+                <form onSubmit={handleSubmit} className='w-[100%]'>
                     <FormInput 
                         label="Email"
                         type="email" 
@@ -52,7 +79,17 @@ export function LoginPage() {
                         disabled={!email || !password}
                         className="w-full mt-2"
                     >
-                        Entrar
+                        {isLoading ? (
+                            <span className="flex items-center justify-center">
+                                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Entrando...
+                            </span>
+                        ) : (
+                            'Entrar'
+                        )}
                     </Button>
                 </form>
                 <a href="#" className='mt-4 text-[#2563EB] text-sm'>Esqueceu a senha?</a>

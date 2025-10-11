@@ -1,9 +1,15 @@
-import Dashboard from './presentation/pages/Dashboard'
+import { BrowserRouter } from 'react-router-dom'
+import { AuthProvider } from './application/contexts/AuthContext'
+import { AppRoutes } from './application/routes/AppRoutes'
 
 function App() {
 
   return (
-    <Dashboard/ >
+    <BrowserRouter>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
+    </BrowserRouter>
   )
 }
 

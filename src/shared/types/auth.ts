@@ -22,6 +22,12 @@ export interface AuthResponse {
     token: AuthToken;
 }
 
+export interface LocationState {
+    from?: {
+        pathname: string;
+    };
+}
+
 interface AuthContextType {
     user: User | null;
     isAuthenticated: boolean;
