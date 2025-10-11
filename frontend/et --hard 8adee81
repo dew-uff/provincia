@@ -1,0 +1,18 @@
+[33m3b05876[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{0}: reset: moving to 3b05876
+[33m3b05876[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{1}: checkout: moving from router to main
+[33m8adee81[m[33m ([m[1;32mrouter[m[33m)[m HEAD@{2}: commit: feat(Router): Router done
+[33m61a7194[m HEAD@{3}: commit: feat(Auth): Added mockup data to auth provider
+[33md96061f[m HEAD@{4}: commit: feat(Router): Added mocked auth structure
+[33m9414538[m[33m ([m[1;32mmaster[m[33m)[m HEAD@{5}: checkout: moving from master to router
+[33m9414538[m[33m ([m[1;32mmaster[m[33m)[m HEAD@{6}: commit: feat(FormInput): Added Mostrar senha logic
+[33m144972d[m HEAD@{7}: commit: feat(FormInput):Added Mostrar senha UI
+[33mf7a4758[m HEAD@{8}: commit: feat(FormInput):Added input validator
+[33m70fbce8[m HEAD@{9}: commit: fix(Style):Input, container and button roundness fixed
+[33m8055f20[m HEAD@{10}: commit: feat(Login):Page done
+[33mc314d6b[m HEAD@{11}: commit: feat(Login):Submit button margin top adjusted
+[33m4981907[m HEAD@{12}: commit: feat(Button):Button fixed styled done
+[33me36f959[m HEAD@{13}: commit: feat(Types):Centralizing TypeScript types into one document
+[33m321c54f[m HEAD@{14}: commit: feat(Components): Added FormInput component
+[33mc3fc3c5[m HEAD@{15}: commit: feat(Login): Input and label styled
+[33mf3a984c[m HEAD@{16}: commit: chore: Added TODO list
+[33m516c9ea[m HEAD@{17}: commit (initial): feat: Created Vite Project
