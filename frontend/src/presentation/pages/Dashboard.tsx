@@ -1,10 +1,9 @@
 import React from 'react';
+import Header from '../components/Header';
 
 const Dashboard: React.FC = () => {
     return (
-        <div className="">
-            <h1>Dashboard</h1>
-        </div>
+       
     );
 };
 

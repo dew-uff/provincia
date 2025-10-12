@@ -1,9 +1,8 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { PrivateRoute } from './PrivateRoute';
 
-// Pages
 import { LoginPage } from '../../presentation/pages/Login';
-import Dashboard from '../../presentation/pages/Dashboard';
+import Main from '../../presentation/pages/Main';
 
 export const AppRoutes = () => {
     return (
@@ -16,7 +15,7 @@ export const AppRoutes = () => {
                 path="auth/dashboard"
                 element={
                     <PrivateRoute>
-                        <Dashboard />
+                        <Main />
                     </PrivateRoute>
                 }
             />
