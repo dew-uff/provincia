@@ -10,7 +10,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 
 
-export function LoginPage() {
+function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -98,3 +98,5 @@ export function LoginPage() {
         </div>
     );
 }
+
+export default Login;
