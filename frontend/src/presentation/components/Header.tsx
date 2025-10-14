@@ -10,7 +10,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = () => {
     return (
         <header>
-            <div className='flex flex-row justify-between items-center px-4 py-8 border-b border-gray-200'>
+            <div className='bg-white flex flex-row justify-between items-center px-4 py-8 border-b border-gray-200'>
                 <div>
                     <p className='text-[20px] font-bold text-[#2563EB]'>ProvInCia</p>
                 </div>

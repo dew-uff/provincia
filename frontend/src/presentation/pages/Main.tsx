@@ -3,7 +3,7 @@ import Header from '../components/Header'; // seu header
 
 const Main = () => {
     return (
-        <div>
+        <div className='bg-[#F3F4F6]'>
             <Header />
             <main>
                 <Outlet />
