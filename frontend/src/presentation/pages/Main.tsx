@@ -1,9 +1,15 @@
-import Header from "../components/Header";
+import { Outlet } from 'react-router-dom';
+import Header from '../components/Header'; // seu header
 
-function Main() {
+const Main = () => {
     return (
-        <Header />
+        <div>
+            <Header />
+            <main>
+                <Outlet />
+            </main>
+        </div>
     );
-}
+};
 
 export default Main;

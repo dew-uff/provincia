@@ -2,7 +2,9 @@ import React from 'react';
 
 const Dashboard: React.FC = () => {
     return (
-       <h1>Dashboard</h1>
+        <div className='bg-amber-600'>
+            <h1>Dashboard</h1>
+        </div>
     );
 };
 
