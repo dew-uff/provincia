@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-const PageTitle = ({ title }: { title: string }) => {
-  return (
-    <h1 className="text-[28px] font-bold text-[#1F2937]">{title}</h1>
-  );
-};
-
-export default PageTitle; 
-=======
 import SplitText from "../../components/SplitText";
 
 const handleAnimationComplete = () => {
@@ -35,4 +26,3 @@ const PageTitle = ({ title }: { title: string }) => {
 };
 
 export default PageTitle
->>>>>>> c802c73 (feat(Title): Done title and dropdown component)
