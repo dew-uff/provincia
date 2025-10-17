@@ -1,4 +1,3 @@
-// presentation/pages/Login.tsx
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -15,40 +14,29 @@ function Login() {
 
     const from = (location.state as LocationState)?.from?.pathname || '/dashboard';
 
-    // MUDANÇA 1: Substituir useState por useForm do React Hook Form
-    // PORQUE: useForm gerencia o estado do formulário de forma mais eficiente,
-    // integra validação automaticamente e reduz re-renders desnecessários
     const {
-        register,           // Função para registrar inputs
-        handleSubmit,       // Wrapper para onSubmit com validação automática
+        register,           
+        handleSubmit,       
         formState: { 
-            errors,         // Erros de validação do Zod
-            isSubmitting    // Estado de submissão (substitui isLoading)
+            errors,         
+            isSubmitting   
         },
-        setError: setFormError  // Para erros customizados (ex: erro da API)
+        setError: setFormError
     } = useForm<LoginInput>({
-        resolver: zodResolver(loginSchema),  // MUDANÇA 2: Integra Zod para validação
-        mode: 'onChange'  // MUDANÇA 3: Valida enquanto digita (melhor UX)
+        resolver: zodResolver(loginSchema), 
+        mode: 'onChange'  
     });
 
-    // MUDANÇA 4: Função onSubmit recebe dados já validados
-    // PORQUE: O Zod já validou antes de chamar esta função,
-    // garantindo que 'data' está no formato correto (LoginInput)
     const onSubmit = async (data: LoginInput) => {
         try {
-            await login(data);  // MUDANÇA 5: Passa objeto completo validado
+            await login(data);  
             navigate(from, { replace: true });
         } catch (err: unknown) {
-            // MUDANÇA 6: Usa setError do React Hook Form para erros da API
-            // PORQUE: Mantém consistência no gerenciamento de erros
             setFormError('root', {
                 message: err instanceof Error ? err.message : 'Erro ao fazer login'
             });
         }
     };
-
-    // REMOVIDO: useEffect com console.log de validação
-    // PORQUE: Zod já faz a validação automaticamente
 
     return (
         <div className="login-page w-full h-screen flex flex-col justify-center items-center bg-gradient-to-br from-[#667eea] to-[#764ba2]">
@@ -56,28 +44,19 @@ function Login() {
                 <h2 className='text-[#2563EB] mb-2 text-3xl font-bold'>ProvInCia</h2>
                 <p className='text-[#6B7280] text-[0.875rem] mb-9'>Provenance in Smart Cities</p>
 
-                {/* MUDANÇA 7: Exibe erro da API (root error) */}
-                {/* PORQUE: Erros de validação vão para cada campo, 
-                    erros da API vão para 'root' */}
                 {errors.root && (
                     <div className="w-full mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
                         {errors.root.message}
                     </div>
                 )}
 
-                {/* MUDANÇA 8: handleSubmit envolve onSubmit */}
-                {/* PORQUE: Valida com Zod antes de chamar onSubmit */}
                 <form onSubmit={handleSubmit(onSubmit)} className='w-[100%]'>
-                    
-                    {/* MUDANÇA 9: Usa {...register('email')} */}
-                    {/* PORQUE: Registra o campo no React Hook Form,
-                        conecta value/onChange automaticamente */}
                     <FormInput 
                         label="Email"
                         type="email" 
                         id="email"
-                        {...register('email')}  // Substitui value e onChange
-                        validator={!!errors.email}  // MUDANÇA 10: Usa erro do Zod
+                        {...register('email')}
+                        validator={!!errors.email}  
                         message={errors.email?.message || 'E-mail inválido ou não cadastrado.'}
                         required
                     />
@@ -86,17 +65,14 @@ function Login() {
                         label="Senha"
                         type="password"
                         id="password"
-                        {...register('senha')}  // MUDANÇA 11: Nome do campo = nome no schema
-                        validator={!!errors.senha}  // Mostra erro se existir
-                        message={errors.senha?.message}  // Mensagem do Zod
+                        {...register('password')} 
+                        validator={!!errors.password} 
+                        message={errors.password?.message} 
                         required
                     />
-
-                    {/* MUDANÇA 12: Validação automática desabilita botão */}
-                    {/* PORQUE: React Hook Form sabe se o form é válido */}
                     <Button 
                         type="submit"
-                        disabled={isSubmitting}  // MUDANÇA 13: Usa isSubmitting do form
+                        disabled={isSubmitting}
                         className="w-full mt-2"
                     >
                         {isSubmitting ? (
