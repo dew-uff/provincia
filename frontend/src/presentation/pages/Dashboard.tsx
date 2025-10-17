@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PageTitle from '../components/PageTitle';
 import Dropdown from '../components/Dropdown';
+import MetricsCard from '../components/dashboard/MetricsCard';
 
 const Dashboard: React.FC = () => {
     const [selectedPeriod, setSelectedPeriod] = useState<string>('option1');
@@ -27,22 +28,10 @@ const Dashboard: React.FC = () => {
             <div>
                 <section>
                     <div className='container flex flex-row align-middle justify-center gap-6'>
-                        <div className='bg-white rounded-xl shadow-sm p-6 flex-[0_0_180px]'>
-                            <h2>156</h2>
-                            <p>Dataflows</p>
-                        </div>
-                        <div className='bg-white p-6 rounded-xl shadow-sm flex-[0_0_180px]'>
-                            <h2>156</h2>
-                            <p>Dataflows</p>
-                        </div>
-                        <div className='bg-white p-6 rounded-xl shadow-sm flex-[0_0_180px]'>
-                            <h2>156</h2>
-                            <p>Dataflows</p>
-                        </div>
-                        <div className='bg-white p-6 rounded-xl shadow-sm flex-[0_0_180px]'>
-                            <h2>156</h2>
-                            <p>Dataflows</p>
-                        </div>
+                        <MetricsCard numbers="156" indicator="Dataflows" />
+                        <MetricsCard numbers="1,234" indicator="Execuções" />
+                        <MetricsCard numbers="23" indicator="Usuários Ativos" /> 
+                        <MetricsCard numbers="456" indicator="Datasets" />   
                     </div>
                 </section>
             </div>
