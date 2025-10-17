@@ -4,7 +4,7 @@ import { LocalStorageService } from '../LocalStorageService';
 
 // ⬇️ CREDENCIAIS ESTÁTICAS
 const VALID_EMAIL = 'email@email.com.br';
-const VALID_PASSWORD = '1234';
+const VALID_PASSWORD = '123456';
 
 // ⬇️ DADOS MOCKADOS DO USUÁRIO
 const MOCK_USER: User = {

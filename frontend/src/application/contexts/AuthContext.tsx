@@ -6,7 +6,7 @@ import { LogoutUseCase } from '../../domain/use-cases/LogoutUseCase';
 import { AuthContext } from '../../shared/types/auth';
 
 
-const authRepository = new MockAuthRepository(); // ⬅️ Usa o MOCK em vez da API real
+const authRepository = new MockAuthRepository();
 const loginUseCase = new LoginUseCase(authRepository);
 const logoutUseCase = new LogoutUseCase(authRepository);
 
