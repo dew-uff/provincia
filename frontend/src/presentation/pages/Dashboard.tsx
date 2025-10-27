@@ -2,9 +2,36 @@ import React, { useState } from 'react';
 import PageTitle from '../components/PageTitle';
 import Dropdown from '../components/Dropdown';
 import MetricsCard from '../components/dashboard/MetricsCard';
-import TableRow from '../components/dashboard/TableRow';
+import Table from '../components/dashboard/Table';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+
+const colNames = ['Nome', 'Usuário', 'Última Execução', 'Status'];
+const dataFlows = [{
+      "name": "Extração frames",
+      "user": "maria.falci",
+      "lastExecution": "06/10 09:15",
+      "status": "ok"
+    },
+    {
+      "name": "Treinamento DNN",
+      "user": "maria.falci",
+      "lastExecution": "06/10 14:22",
+      "status": "ok"
+    },
+    {
+      "name": "Coleta videos",
+      "user": "joao.silva",
+      "lastExecution": "05/10 18:45",
+      "status": "ok"
+    },
+    {
+      "name": "Pre-processamento",
+      "user": "ana.souza",
+      "lastExecution": "05/10 20:10",
+      "status": "alerta"
+    }
+];
 
 const Dashboard: React.FC = () => {
     const [selectedPeriod, setSelectedPeriod] = useState<string>('option1');
@@ -49,22 +76,7 @@ const Dashboard: React.FC = () => {
                             </a>
                         </div>
                         <div>
-                            <table className="w-full border-collapse">
-                                    <thead>
-                                        <tr>
-                                            <th className="text-left px-3 py-3 text-gray-500 font-semibold text-sm border-b-2 border-gray-200">Nome</th>
-                                            <th className="text-left px-3 py-3 text-gray-500 font-semibold text-sm border-b-2 border-gray-200">Usuário</th>
-                                            <th className="text-left px-3 py-3 text-gray-500 font-semibold text-sm border-b-2 border-gray-200">Última Execução</th>
-                                            <th className="text-left px-3 py-3 text-gray-500 font-semibold text-sm border-b-2 border-gray-200">Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <TableRow name="Extração Frames" user="maria.falci" lastExecution="06/10 09:15" status="ok" />
-                                        <TableRow name="Treinamento DNN" user="maria.falci" lastExecution="06/10 14:22" status="ok" />
-                                        <TableRow name="Coleta Videos" user="joao.silva" lastExecution="05/10 18:45" status="ok" />
-                                        <TableRow name="Pre-processamento" user="ana.souza" lastExecution="05/10 20:10" status="alerta" />                              
-                                    </tbody>
-                            </table>
+                            <Table colNames={colNames} dataFlows={dataFlows} />
                         </div>
                     </div>
                 </section>
