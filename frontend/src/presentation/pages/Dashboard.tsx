@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PageTitle from '../components/PageTitle';
 import Dropdown from '../components/Dropdown';
 import MetricsCard from '../components/dashboard/MetricsCard';
+import TableRow from '../components/dashboard/TableRow';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
@@ -48,41 +49,21 @@ const Dashboard: React.FC = () => {
                             </a>
                         </div>
                         <div>
-                            <table className="w-full mt-4 table-auto text-left">
-                                <thead className='w-full'>
-                                    <tr>
-                                        <th>Nome</th>
-                                        <th>Usuário</th>
-                                        <th>Última Execução</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Extração Frames</td>
-                                        <td>maria.falci</td>
-                                        <td>06/10 15:30</td>
-                                        <td>✓ OK</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Treinamento DNN</td>
-                                        <td>maria.falci</td>
-                                        <td>06/10 14:22</td>
-                                        <td>✓ OK</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Coleta Videos</td>
-                                        <td>usuario3</td>
-                                        <td>05/10 18:45</td>
-                                        <td>✓ OK</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Pre-processamento</td>
-                                        <td>usuario2</td>
-                                        <td>05/10 12:10</td>
-                                        <td>⚠ Alerta</td>
-                                    </tr>
-                                </tbody>
+                            <table className="w-full border-collapse">
+                                    <thead>
+                                        <tr>
+                                            <th className="text-left px-3 py-3 text-gray-500 font-semibold text-sm border-b-2 border-gray-200">Nome</th>
+                                            <th className="text-left px-3 py-3 text-gray-500 font-semibold text-sm border-b-2 border-gray-200">Usuário</th>
+                                            <th className="text-left px-3 py-3 text-gray-500 font-semibold text-sm border-b-2 border-gray-200">Última Execução</th>
+                                            <th className="text-left px-3 py-3 text-gray-500 font-semibold text-sm border-b-2 border-gray-200">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <TableRow name="Extração Frames" user="maria.falci" lastExecution="06/10 09:15" status="ok" />
+                                        <TableRow name="Treinamento DNN" user="maria.falci" lastExecution="06/10 14:22" status="ok" />
+                                        <TableRow name="Coleta Videos" user="joao.silva" lastExecution="05/10 18:45" status="ok" />
+                                        <TableRow name="Pre-processamento" user="ana.souza" lastExecution="05/10 20:10" status="alerta" />                              
+                                    </tbody>
                             </table>
                         </div>
                     </div>
