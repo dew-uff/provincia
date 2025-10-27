@@ -1,5 +1,7 @@
+//TODO: Fazer a criação de campos ser dinâmica conforma o schema definido pelo número de colunas na tabela
+
 function TableRow({ name, user, lastExecution, status }: { name: string; user: string; lastExecution: string; status: string }) {
-    return(
+    return (
         <tr>
             <td className="py-4 px-3 border-b border-gray-100 text-gray-800">{name}</td>
             <td className="py-4 px-3 border-b border-gray-100 text-gray-800">{user}</td>
