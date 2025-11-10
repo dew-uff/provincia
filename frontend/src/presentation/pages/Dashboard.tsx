@@ -7,6 +7,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 const colNames = ['Nome', 'Usuário', 'Última Execução', 'Status'];
+
+// Configuração das colunas da tabela
+const columns = [
+    { key: 'name', type: 'text' as const },
+    { key: 'user', type: 'text' as const },
+    { key: 'lastExecution', type: 'text' as const },
+    { key: 'status', type: 'status' as const }
+];
+
 const dataFlows = [{
       "name": "Extração frames",
       "user": "maria.falci",
@@ -76,7 +85,7 @@ const Dashboard: React.FC = () => {
                             </a>
                         </div>
                         <div>
-                            <Table colNames={colNames} dataFlows={dataFlows} />
+                            <Table colNames={colNames} columns={columns} data={dataFlows} />
                         </div>
                     </div>
                 </section>

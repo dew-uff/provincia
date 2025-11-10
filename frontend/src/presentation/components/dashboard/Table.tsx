@@ -1,27 +1,32 @@
 import TableRow from './TableRow';
 import TableColName from './TableColName';
+import type { ColumnConfig, RowData } from '../../../shared/types/table';
 
-function Table ({colNames = [''], dataFlows = []} : {colNames?: string[], dataFlows?: Array<{name: string, user: string, lastExecution: string, status: string}>}) {
-    return(
+interface TableProps {
+    colNames?: string[];
+    columns: ColumnConfig[];
+    data?: RowData[];
+}
+
+function Table({ colNames = [''], columns, data = [] }: TableProps) {
+    return (
         <table className="w-full border-collapse">
-                <thead>
-                    <tr>
-                        {colNames.map((name, i) => (
-                            <TableColName key={i}>{name}</TableColName>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {dataFlows.map((flow, i) => (
-                        <TableRow 
-                            key={i}                            
-                            name={flow.name}
-                            user={flow.user}
-                            lastExecution={flow.lastExecution}
-                            status={flow.status}
-                        />
+            <thead>
+                <tr>
+                    {colNames.map((name, i) => (
+                        <TableColName key={i}>{name}</TableColName>
                     ))}
-                </tbody>
+                </tr>
+            </thead>
+            <tbody>
+                {data.map((row, i) => (
+                    <TableRow
+                        key={i}
+                        data={row}
+                        columns={columns}
+                    />
+                ))}
+            </tbody>
         </table>
     );
 }
