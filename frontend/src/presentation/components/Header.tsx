@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 
@@ -15,10 +16,10 @@ const Header: React.FC<HeaderProps> = () => {
                     <p className='text-[20px] font-bold text-[#2563EB]'>ProvInCia</p>
                 </div>
                 <nav className='flex flex-row gap-8'>
-                    <a href="/" className='text-[#6B7280] font-[500]'>Home</a>
-                    <a href="/about" className='text-[#6B7280] font-[500]'>Sobre</a>
-                    <a href="/services" className='text-[#6B7280] font-[500]'>Serviços</a>
-                    <a href="/contact" className='text-[#6B7280] font-[500]'>Contato</a>
+                    <Link to="/dashboard" className='text-[#6B7280] font-[500]'>Dashboard</Link>
+                    <Link to="/dataflows" className='text-[#6B7280] font-[500]'>Dataflows</Link>
+                    <Link to="/consultas" className='text-[#6B7280] font-[500]'>Consultas</Link>
+                    <Link to="/upload" className='text-[#6B7280] font-[500]'>Upload</Link>
                 </nav>
                 <div className='flex flex-row gap-2 items-center cursor-pointer'>
                     <p>Maria Luzia Falci</p>
