@@ -9,6 +9,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = () => {
+    //TODO: Implements appropriated header links navigation
     return (
         <header>
             <div className='bg-white flex flex-row justify-between items-center px-4 py-8 border-b border-gray-200'>
