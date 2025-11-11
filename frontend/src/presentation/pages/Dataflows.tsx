@@ -21,11 +21,6 @@ const columns = [
 
 const dataflowRepository = new MockDataflowRepository();
 
-/**TO DO:
- *
- * - Fix date prop in Dataflow type to Date type instead of string
- */
-
 function Dataflows() {
     const [dataFlows, setDataFlows] = useState<Dataflow[]>([]);
     const [loading, setLoading] = useState<boolean>(true);

@@ -19,11 +19,6 @@ const columns = [
 
 const dashboardRepository = new MockDashboardRepository();
 
-/**TO DO:
- * 
- * - Fix date prop in Dataflow type to Date type instead of string
- */
-
 const Dashboard: React.FC = () => {
     const [selectedPeriod, setSelectedPeriod] = useState<string>('option1');
     const [dataFlows, setDataFlows] = useState<Dataflow[]>([]);
