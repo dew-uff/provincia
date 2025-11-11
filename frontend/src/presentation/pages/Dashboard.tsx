@@ -17,7 +17,6 @@ const columns = [
     { key: 'status', type: 'status' as const }
 ];
 
-// Instância do repositório mockado
 const dashboardRepository = new MockDashboardRepository();
 
 const Dashboard: React.FC = () => {
