@@ -5,8 +5,6 @@ import Table from '../components/Table';
 
 import { type Dataflow } from '../../shared/types/dashboard';
 import { MockDataflowRepository } from '../../infrastructure/storage/repositories/MockDataflowRepository';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 const colNames = ['ID','Nome', 'Usuário', 'Última Execução', 'Status', 'Ações'];
 
@@ -51,6 +49,12 @@ function Dataflows() {
         );
     }
 
+    /**TODO:
+     * - Implements search bar and filters
+     * - Implements pagination
+     * - Implements actions (view and download)
+     */
+
     return (
         <main className='flex flex-col items-center p-6 w-full h-full'>
             <div className='container w-full max-w-[800px] flex flex-row align-middle justify-between mb-4'>
@@ -65,7 +69,7 @@ function Dataflows() {
             </div>
             <div className="mt-9 container max-w-[800px]">
                 <section>
-                    <div className="w-full bg-white">
+                    <div className="w-full bg-white rounded-xl">
                         <Table colNames={colNames} columns={columns} data={dataFlows} />
                     </div>
                 </section>
