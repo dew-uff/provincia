@@ -12,24 +12,28 @@ const MOCK_METRICS: DashboardMetrics = {
 // ⬇️ DADOS MOCKADOS DOS DATAFLOWS
 const MOCK_DATAFLOWS: Dataflow[] = [
     {
+        id: '1',
         name: "Extração frames",
         user: "maria.falci",
         lastExecution: "06/10 09:15",
         status: "ok"
     },
     {
+        id: '2',
         name: "Treinamento DNN",
         user: "maria.falci",
         lastExecution: "06/10 14:22",
         status: "ok"
     },
     {
+        id: '3',
         name: "Coleta videos",
         user: "joao.silva",
         lastExecution: "05/10 18:45",
         status: "ok"
     },
     {
+        id: '4',
         name: "Pre-processamento",
         user: "ana.souza",
         lastExecution: "05/10 20:10",

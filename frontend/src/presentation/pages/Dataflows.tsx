@@ -4,7 +4,7 @@ import PageTitle from '../components/PageTitle';
 import Table from '../components/dashboard/Table';
 
 import { type Dataflow } from '../../shared/types/dashboard';
-import { MockDashboardRepository } from '../../infrastructure/storage/repositories/MockDashboardRepository';
+import { MockDataflowRepository } from '../../infrastructure/storage/repositories/MockDataflowRepository';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
@@ -19,26 +19,31 @@ const columns = [
     { key: 'actions', type: 'actions' as const }
 ];
 
-const dashboardRepository = new MockDashboardRepository();
+const dataflowRepository = new MockDataflowRepository();
+
+/**TO DO:
+ *
+ * - Fix date prop in Dataflow type to Date type instead of string
+ */
 
 function Dataflows() {
     const [dataFlows, setDataFlows] = useState<Dataflow[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        const loadDashboardData = async () => {
+        const loadDataflows = async () => {
             try {
                 setLoading(true);
-                const data = await dashboardRepository.getDashboardData();
-                setDataFlows(data.recentDataflows);
+                const data = await dataflowRepository.getAllDataflows();
+                setDataFlows(data);
             } catch (error) {
-                console.error('Erro ao carregar dados do dashboard:', error);
+                console.error('Erro ao carregar dataflows:', error);
             } finally {
                 setLoading(false);
             }
         };
 
-        loadDashboardData();
+        loadDataflows();
     }, []);
 
     if (loading) {

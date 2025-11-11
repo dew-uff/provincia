@@ -2,6 +2,7 @@ import { type StatusType } from './table';
 
 // Tipo para Dataflow
 export interface Dataflow {
+    id: string;
     name: string;
     user: string;
     lastExecution: string;
