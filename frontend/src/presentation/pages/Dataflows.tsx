@@ -54,7 +54,7 @@ function Dataflows() {
     return (
         <main className='flex flex-col items-center p-6 w-full h-full'>
             <div className='container w-full max-w-[800px] flex flex-row align-middle justify-between mb-4'>
-                <PageTitle title="Dashboard" />
+                <PageTitle title="Dataflows" />
             </div>
             <div className="mt-4.5 container max-w-[800px]">
                 <section>

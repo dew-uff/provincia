@@ -15,22 +15,22 @@ function TableRow<T extends RowData = RowData>({ data, columns }: TableRowProps<
             if (statusValue === 'alerta') {
                 return (
                     <td key={column.key} className="py-4 px-3 border-b border-gray-100 text-amber-500 font-medium">
-                        ⚠ Alerta
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-2xl text-[13px] font-medium bg-amber-100 text-amber-800">⚠ Alerta</span>
                     </td>
                 );
             }
 
             if (statusValue === 'erro') {
                 return (
-                    <td key={column.key} className="py-4 px-3 border-b border-gray-100 text-red-500 font-medium">
-                        ✗ Erro
+                    <td key={column.key} className="py-4 px-3 border-b border-gray-100">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-2xl text-[13px] font-medium bg-red-100 text-red-800">✗ Erro</span>
                     </td>
                 );
             }
 
             return (
                 <td key={column.key} className="py-4 px-3 border-b border-gray-100 text-green-500 font-medium">
-                    ✓ OK
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-2xl text-[13px] font-medium bg-emerald-100 text-emerald-800">✓ OK</span>
                 </td>
             );
         }
