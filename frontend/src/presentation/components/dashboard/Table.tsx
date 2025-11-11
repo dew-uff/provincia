@@ -10,7 +10,7 @@ interface TableProps<T extends RowData = RowData> {
 
 function Table<T extends RowData = RowData>({ colNames = [''], columns, data = [] }: TableProps<T>) {
     return (
-        <table className="w-full border-collapse">
+        <table className="w-full border-collapse rounded-lg overflow-hidden">
             <thead className="bg-gray-50 px-5 py-4 text-left text-[13px] font-semibold text-gray-500 uppercase tracking-wide border-b-2 border-gray-200">
                 <tr>
                     {colNames.map((name, i) => (

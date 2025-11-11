@@ -65,17 +65,8 @@ function Dataflows() {
             </div>
             <div className="mt-9 container max-w-[800px]">
                 <section>
-                    <div className="w-full bg-white rounded-xl p-5">
-                        <div className="w-full flex flex-row justify-between items-center">
-                            <h2 className="text-[20px] font-semibold text-[#1F2937]">Dataflows Recentes</h2>
-                            <a href="#" className="text-[#2563EB] text-sm">
-                                Ver todos
-                                <FontAwesomeIcon icon={faArrowRight} size='xs'/>
-                            </a>
-                        </div>
-                        <div>
-                            <Table colNames={colNames} columns={columns} data={dataFlows} />
-                        </div>
+                    <div className="w-full bg-white">
+                        <Table colNames={colNames} columns={columns} data={dataFlows} />
                     </div>
                 </section>
             </div>
