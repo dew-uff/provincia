@@ -4,6 +4,9 @@ import { PrivateRoute } from './PrivateRoute';
 import Main from '../../presentation/pages/Main';
 import Login from '../../presentation/pages/Login';
 import Dashboard from '../../presentation/pages/Dashboard';
+import Dataflows from '../../presentation/pages/Dataflows';
+import Search from '../../presentation/pages/Search';
+import Upload from '../../presentation/pages/Upload';
 
 export const AppRoutes = () => {
     return (
@@ -21,6 +24,9 @@ export const AppRoutes = () => {
                 }
             >
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/dataflows" element={<Dataflows />} />
+                <Route path="/consultas" element={<Search />} />
+                <Route path="/upload" element={<Upload />} />
             </Route>
 
             {/* Redirects */}
