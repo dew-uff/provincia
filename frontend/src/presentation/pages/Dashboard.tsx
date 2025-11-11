@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PageTitle from '../components/PageTitle';
 import Dropdown from '../components/Dropdown';
 import MetricsCard from '../components/dashboard/MetricsCard';
 import Table from '../components/dashboard/Table';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { MockDashboardRepository } from '../../infrastructure/storage/repositories/MockDashboardRepository';
+import { type Dataflow, type DashboardMetrics, type PeriodOption } from '../../shared/types/dashboard';
 
 const colNames = ['Nome', 'Usuário', 'Última Execução', 'Status'];
 
-// Configuração das colunas da tabela
 const columns = [
     { key: 'name', type: 'text' as const },
     { key: 'user', type: 'text' as const },
@@ -16,47 +17,50 @@ const columns = [
     { key: 'status', type: 'status' as const }
 ];
 
-const dataFlows = [{
-      "name": "Extração frames",
-      "user": "maria.falci",
-      "lastExecution": "06/10 09:15",
-      "status": "ok"
-    },
-    {
-      "name": "Treinamento DNN",
-      "user": "maria.falci",
-      "lastExecution": "06/10 14:22",
-      "status": "ok"
-    },
-    {
-      "name": "Coleta videos",
-      "user": "joao.silva",
-      "lastExecution": "05/10 18:45",
-      "status": "ok"
-    },
-    {
-      "name": "Pre-processamento",
-      "user": "ana.souza",
-      "lastExecution": "05/10 20:10",
-      "status": "alerta"
-    }
-];
+// Instância do repositório mockado
+const dashboardRepository = new MockDashboardRepository();
 
 const Dashboard: React.FC = () => {
     const [selectedPeriod, setSelectedPeriod] = useState<string>('option1');
+    const [dataFlows, setDataFlows] = useState<Dataflow[]>([]);
+    const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
+    const [periodOptions, setPeriodOptions] = useState<PeriodOption[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+        const loadDashboardData = async () => {
+            try {
+                setLoading(true);
+                const data = await dashboardRepository.getDashboardData();
+                setDataFlows(data.recentDataflows);
+                setMetrics(data.metrics);
+                setPeriodOptions(data.periodOptions);
+            } catch (error) {
+                console.error('Erro ao carregar dados do dashboard:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadDashboardData();
+    }, []);
+
+    if (loading) {
+        return (
+            <main className='flex flex-col items-center p-6 w-full h-full'>
+                <div className='container w-full max-w-[800px] flex flex-row align-middle justify-center'>
+                    <p>Carregando...</p>
+                </div>
+            </main>
+        );
+    }
 
     return (
         <main className='flex flex-col items-center p-6 w-full h-full'>
             <div className='container w-full max-w-[800px] flex flex-row align-middle justify-between mb-4'>
                 <PageTitle title="Dashboard" />
                 <Dropdown
-                    options={[
-                        { label: 'Últimos 7 dias', value: 'option1' },
-                        { label: 'Últimos 30 dias', value: 'option2' },
-                        { label: 'Últimos 90 dias', value: 'option3' },
-                        { label: 'Últimos 365 dias', value: 'option4' },
-                        { label: 'Todos', value: 'option5' }
-                    ]}
+                    options={periodOptions}
                     value={selectedPeriod}
                     onChange={(value) => {
                         setSelectedPeriod(value);
@@ -67,10 +71,10 @@ const Dashboard: React.FC = () => {
             <div className="mt-4.5 container max-w-[800px]">
                 <section>
                     <div className='flex flex-row align-middle justify-center gap-6'>
-                        <MetricsCard numbers="156" indicator="Dataflows" />
-                        <MetricsCard numbers="1,234" indicator="Execuções" />
-                        <MetricsCard numbers="23" indicator="Usuários Ativos" /> 
-                        <MetricsCard numbers="456" indicator="Datasets" />   
+                        <MetricsCard numbers={metrics?.dataflows.toString() || '0'} indicator="Dataflows" />
+                        <MetricsCard numbers={metrics?.executions.toLocaleString('pt-BR') || '0'} indicator="Execuções" />
+                        <MetricsCard numbers={metrics?.activeUsers.toString() || '0'} indicator="Usuários Ativos" />
+                        <MetricsCard numbers={metrics?.datasets.toString() || '0'} indicator="Datasets" />
                     </div>
                 </section>
             </div>

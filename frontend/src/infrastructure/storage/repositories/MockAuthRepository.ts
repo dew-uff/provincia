@@ -2,11 +2,9 @@ import { type IAuthRepository } from '../../../domain/repositories/IAuthReposito
 import { type User, type LoginCredentials, type AuthResponse } from '../../../shared/types/auth';
 import { LocalStorageService } from '../LocalStorageService';
 
-// ⬇️ CREDENCIAIS ESTÁTICAS
 const VALID_EMAIL = 'email@email.com.br';
 const VALID_PASSWORD = '123456';
 
-// ⬇️ DADOS MOCKADOS DO USUÁRIO
 const MOCK_USER: User = {
     id: '1',
     nome: 'Usuário Teste',
@@ -17,21 +15,17 @@ const MOCK_USER: User = {
 export class MockAuthRepository implements IAuthRepository {
     
     async login(credentials: LoginCredentials): Promise<AuthResponse> {
-        // Simula delay de rede (opcional - mais realista)
         await this.simulateDelay(800);
 
-        // ⬇️ VALIDAÇÃO CONTRA CREDENCIAIS ESTÁTICAS
         if (
             credentials.email === VALID_EMAIL && 
             credentials.password === VALID_PASSWORD
         ) {
-            // Gera um token fake (apenas para exemplo)
             const token = {
                 token: this.generateFakeToken(),
                 expiresIn: '7d',
             };
 
-            // Salva no localStorage
             LocalStorageService.saveAuth(MOCK_USER, token);
 
             return {
@@ -39,7 +33,6 @@ export class MockAuthRepository implements IAuthRepository {
                 token,
             };
         } else {
-            // Credenciais inválidas
             throw new Error('Email ou senha incorretos');
         }
     }
@@ -57,8 +50,6 @@ export class MockAuthRepository implements IAuthRepository {
     isAuthenticated(): boolean {
         return LocalStorageService.isAuthenticated();
     }
-
-    // ⬇️ HELPERS PRIVADOS
 
     private async simulateDelay(ms: number): Promise<void> {
         return new Promise(resolve => setTimeout(resolve, ms));
