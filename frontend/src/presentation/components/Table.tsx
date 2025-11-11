@@ -1,6 +1,6 @@
 import TableRow from './TableRow';
 import TableColName from './TableColName';
-import type { ColumnConfig, RowData } from '../../../shared/types/table';
+import type { ColumnConfig, RowData } from '../../shared/types/table';
 
 interface TableProps<T extends RowData = RowData> {
     colNames?: string[];

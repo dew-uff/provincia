@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PageTitle from '../components/PageTitle';
 import Dropdown from '../components/Dropdown';
 import MetricsCard from '../components/dashboard/MetricsCard';
-import Table from '../components/dashboard/Table';
+import Table from '../components/Table';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { MockDashboardRepository } from '../../infrastructure/storage/repositories/MockDashboardRepository';

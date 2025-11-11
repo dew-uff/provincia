@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import PageTitle from '../components/PageTitle';
-import Table from '../components/dashboard/Table';
+import Table from '../components/Table';
 
 import { type Dataflow } from '../../shared/types/dashboard';
 import { MockDataflowRepository } from '../../infrastructure/storage/repositories/MockDataflowRepository';

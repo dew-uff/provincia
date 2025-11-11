@@ -1,4 +1,4 @@
-import type { ColumnConfig, RowData } from '../../../shared/types/table';
+import type { ColumnConfig, RowData } from '../../shared/types/table';
 
 interface TableRowProps<T extends RowData = RowData> {
     data: T;
