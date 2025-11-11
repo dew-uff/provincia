@@ -1,7 +1,7 @@
-import { type StatusType } from './table';
+import { type StatusType, type RowData } from './table';
 
 // Tipo para Dataflow
-export interface Dataflow {
+export interface Dataflow extends RowData {
     id: string;
     name: string;
     user: string;

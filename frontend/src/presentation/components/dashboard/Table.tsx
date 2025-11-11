@@ -2,13 +2,13 @@ import TableRow from './TableRow';
 import TableColName from './TableColName';
 import type { ColumnConfig, RowData } from '../../../shared/types/table';
 
-interface TableProps {
+interface TableProps<T extends RowData = RowData> {
     colNames?: string[];
     columns: ColumnConfig[];
-    data?: RowData[];
+    data?: T[];
 }
 
-function Table({ colNames = [''], columns, data = [] }: TableProps) {
+function Table<T extends RowData = RowData>({ colNames = [''], columns, data = [] }: TableProps<T>) {
     return (
         <table className="w-full border-collapse">
             <thead>
@@ -20,7 +20,7 @@ function Table({ colNames = [''], columns, data = [] }: TableProps) {
             </thead>
             <tbody>
                 {data.map((row, i) => (
-                    <TableRow
+                    <TableRow<T>
                         key={i}
                         data={row}
                         columns={columns}
