@@ -14,7 +14,7 @@ function TableRow<T extends RowData = RowData>({ data, columns }: TableRowProps<
 
             if (statusValue === 'alerta') {
                 return (
-                    <td key={column.key} className="py-4 px-3 border-b border-gray-100 text-amber-500 font-medium">
+                    <td key={column.key} className="px-5 py-4 text-sm text-[#1F2937]">
                         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-2xl text-[13px] font-medium bg-amber-100 text-amber-800">⚠ Alerta</span>
                     </td>
                 );
@@ -22,14 +22,14 @@ function TableRow<T extends RowData = RowData>({ data, columns }: TableRowProps<
 
             if (statusValue === 'erro') {
                 return (
-                    <td key={column.key} className="py-4 px-3 border-b border-gray-100">
+                    <td key={column.key} className="px-5 py-4 text-sm text-[#1F2937]">
                         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-2xl text-[13px] font-medium bg-red-100 text-red-800">✗ Erro</span>
                     </td>
                 );
             }
 
             return (
-                <td key={column.key} className="py-4 px-3 border-b border-gray-100 text-green-500 font-medium">
+                <td key={column.key} className="px-5 py-4 text-sm text-[#1F2937]">
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-2xl text-[13px] font-medium bg-emerald-100 text-emerald-800">✓ OK</span>
                 </td>
             );
@@ -37,7 +37,7 @@ function TableRow<T extends RowData = RowData>({ data, columns }: TableRowProps<
 
         if (column.type === 'actions') {
             return (
-                <td key={column.key} className="py-4 px-3 border-b border-gray-100">
+                <td key={column.key} className="px-5 py-4 text-sm text-[#1F2937]">
                     <button className="text-blue-600 hover:text-blue-800 font-medium">
                         Ver detalhes
                     </button>
@@ -46,14 +46,14 @@ function TableRow<T extends RowData = RowData>({ data, columns }: TableRowProps<
         }
 
         return (
-            <td key={column.key} className="py-4 px-3 border-b border-gray-100 text-gray-800">
+            <td key={column.key} className="px-5 py-4 text-sm text-[#1F2937]">
                 {String(value)}
             </td>
         );
     };
 
     return (
-        <tr>
+        <tr className="border-b border-[#F3F4FB] transition-colors duration-200 hover:bg-[#F9FAFB]">
             {columns.map(column => renderCell(column))}
         </tr>
     );
