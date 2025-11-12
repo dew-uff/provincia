@@ -63,7 +63,6 @@ const Dashboard: React.FC = () => {
                     value={selectedPeriod}
                     onChange={(value) => {
                         setSelectedPeriod(value);
-                        console.log(value);
                     }}
                  />
             </div>

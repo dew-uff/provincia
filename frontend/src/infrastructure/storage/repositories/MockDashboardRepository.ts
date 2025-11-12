@@ -1,7 +1,6 @@
 import { type IDashboardRepository } from '../../../domain/repositories/IDashboardRepository';
 import { type DashboardData, type Dataflow, type DashboardMetrics, type PeriodOption } from '../../../shared/types/dashboard';
 
-// ⬇️ DADOS MOCKADOS DAS MÉTRICAS
 const MOCK_METRICS: DashboardMetrics = {
     dataflows: 156,
     executions: 1234,
@@ -9,7 +8,6 @@ const MOCK_METRICS: DashboardMetrics = {
     datasets: 456,
 };
 
-// ⬇️ DADOS MOCKADOS DOS DATAFLOWS
 const MOCK_DATAFLOWS: Dataflow[] = [
     {
         id: '1',
@@ -41,7 +39,6 @@ const MOCK_DATAFLOWS: Dataflow[] = [
     }
 ];
 
-// ⬇️ OPÇÕES DE PERÍODO MOCKADAS
 const MOCK_PERIOD_OPTIONS: PeriodOption[] = [
     { label: 'Últimos 7 dias', value: 'option1' },
     { label: 'Últimos 30 dias', value: 'option2' },
@@ -53,7 +50,6 @@ const MOCK_PERIOD_OPTIONS: PeriodOption[] = [
 export class MockDashboardRepository implements IDashboardRepository {
 
     async getDashboardData(): Promise<DashboardData> {
-        // Simula delay de rede
         await this.simulateDelay(500);
 
         return {
@@ -74,11 +70,9 @@ export class MockDashboardRepository implements IDashboardRepository {
     }
 
     getPeriodOptions(): PeriodOption[] {
-        // Não precisa de delay pois são dados estáticos
         return MOCK_PERIOD_OPTIONS;
     }
 
-    // ⬇️ HELPER PRIVADO
     private async simulateDelay(ms: number): Promise<void> {
         return new Promise(resolve => setTimeout(resolve, ms));
     }

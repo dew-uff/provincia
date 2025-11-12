@@ -23,6 +23,12 @@ export interface PeriodOption {
     value: string;
 }
 
+// Tipo para opções de status de dataflow
+export interface StatusOption {
+    label: string;
+    value: StatusType | 'all';
+}
+
 // Tipo completo de dados do Dashboard
 export interface DashboardData {
     metrics: DashboardMetrics;

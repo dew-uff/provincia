@@ -44,10 +44,8 @@ const Dropdown: React.FC<DropdownProps> = ({
   const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Encontra a opção selecionada
   const selectedOption = options.find(opt => opt.value === value);
 
-  // Fecha o dropdown ao clicar fora
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -60,7 +58,6 @@ const Dropdown: React.FC<DropdownProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Navegação por teclado
   useEffect(() => {
     if (!isOpen) return;
 
@@ -70,7 +67,6 @@ const Dropdown: React.FC<DropdownProps> = ({
           e.preventDefault();
           setHighlightedIndex(prev => {
             const nextIndex = prev < options.length - 1 ? prev + 1 : prev;
-            // Pula opções desabilitadas
             if (options[nextIndex]?.disabled) {
               return nextIndex < options.length - 1 ? nextIndex + 1 : prev;
             }
@@ -81,7 +77,6 @@ const Dropdown: React.FC<DropdownProps> = ({
           e.preventDefault();
           setHighlightedIndex(prev => {
             const nextIndex = prev > 0 ? prev - 1 : prev;
-            // Pula opções desabilitadas
             if (options[nextIndex]?.disabled) {
               return nextIndex > 0 ? nextIndex - 1 : prev;
             }
@@ -127,13 +122,12 @@ const Dropdown: React.FC<DropdownProps> = ({
 
   return (
     <div ref={dropdownRef} className={`relative ${containerClassName}`}>
-      {/* Botão do dropdown */}
       <button
         type="button"
         onClick={handleToggle}
         disabled={disabled}
         className={`
-          flex items-center justify-between
+          flex items-center justify-between align-middle
           ${buttonClassName}
           ${isOpen ? buttonActiveClassName : ''}
           ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
@@ -144,7 +138,6 @@ const Dropdown: React.FC<DropdownProps> = ({
           <span>{selectedOption?.label || placeholder}</span>
         </span>
         
-        {/* Ícone de seta */}
         <svg
           className={`w-5 h-5 transition-transform ${isOpen ? 'rotate-180' : ''}`}
           fill="none"
@@ -155,7 +148,6 @@ const Dropdown: React.FC<DropdownProps> = ({
         </svg>
       </button>
 
-      {/* Menu do dropdown */}
       {isOpen && (
         <div className={menuClassName}>
           {options.map((option, index) => {

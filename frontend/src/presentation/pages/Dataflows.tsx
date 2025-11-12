@@ -6,6 +6,8 @@ import SearchBar from '../components/dataflows/SearchBar';
 
 import { type Dataflow } from '../../shared/types/dashboard';
 import { MockDataflowRepository } from '../../infrastructure/storage/repositories/MockDataflowRepository';
+import { DATAFLOW_STATUS_OPTIONS } from '../../infrastructure/storage/repositories/MockDataflowRepository';
+import Dropdown from '../components/Dropdown';
 
 const colNames = ['ID','Nome', 'Usuário', 'Última Execução', 'Status', 'Ações'];
 
@@ -23,6 +25,7 @@ const dataflowRepository = new MockDataflowRepository();
 function Dataflows() {
     const [dataFlows, setDataFlows] = useState<Dataflow[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [selectedStatus, setSelectedStatus] = useState<string>('all');
 
     useEffect(() => {
         const loadDataflows = async () => {
@@ -63,8 +66,18 @@ function Dataflows() {
             </div>
             <div className="mt-4.5 container max-w-[800px]">
                 <section>
-                    <div className='flex flex-row align-middle justify-center gap-6'>
+                    <div className='flex flex-row align-middle justify-center gap-6 bg-white rounded-xl shadow-sm'>
                         <SearchBar />
+                        <div className="flex flex-1 flex-col align-middle justify-center pr-4">
+                            <Dropdown
+                                options={DATAFLOW_STATUS_OPTIONS}
+                                value={selectedStatus}
+                                onChange={(value) => {
+                                    setSelectedStatus(value);
+                                    console.log(value);
+                                }}
+                            />
+                        </div>
                     </div>
                 </section>
             </div>

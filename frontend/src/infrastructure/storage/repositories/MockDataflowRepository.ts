@@ -1,5 +1,13 @@
 import { type IDataflowRepository } from '../../../domain/repositories/IDataflowRepository';
-import { type Dataflow } from '../../../shared/types/dashboard';
+import { type Dataflow, type StatusOption } from '../../../shared/types/dashboard';
+
+// ⬇️ OPÇÕES DE STATUS PARA DROPDOWN
+export const DATAFLOW_STATUS_OPTIONS: StatusOption[] = [
+    { label: 'Todos', value: 'all' },
+    { label: 'OK', value: 'ok' },
+    { label: 'Alerta', value: 'alerta' },
+    { label: 'Erro', value: 'erro' }
+];
 
 // ⬇️ DADOS MOCKADOS DOS DATAFLOWS
 const MOCK_DATAFLOWS: Dataflow[] = [
