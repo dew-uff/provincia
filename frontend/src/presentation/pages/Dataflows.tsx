@@ -8,6 +8,7 @@ import { type Dataflow } from '../../shared/types/dashboard';
 import { MockDataflowRepository } from '../../infrastructure/storage/repositories/MockDataflowRepository';
 import { DATAFLOW_STATUS_OPTIONS } from '../../infrastructure/storage/repositories/MockDataflowRepository';
 import Dropdown from '../components/Dropdown';
+import Button from '../components/Button';
 
 const colNames = ['ID','Nome', 'Usuário', 'Última Execução', 'Status', 'Ações'];
 
@@ -66,16 +67,22 @@ function Dataflows() {
             </div>
             <div className="mt-4.5 container max-w-[800px]">
                 <section>
-                    <div className='flex flex-row align-middle justify-center gap-6 bg-white rounded-xl shadow-sm'>
+                    <div className='flex flex-row align-middle justify-between gap-6 bg-white rounded-xl shadow-sm'>
                         <SearchBar />
-                        <div className="flex flex-1 flex-col align-middle justify-center pr-4">
+                        <div className="flex flex-col align-middle justify-center ">
                             <Dropdown
                                 options={DATAFLOW_STATUS_OPTIONS}
                                 value={selectedStatus}
                                 onChange={(value) => {
                                     setSelectedStatus(value);
-                                    console.log(value);
                                 }}
+                            />
+                        </div>
+                        <div className='w-full flex px-[10px] py-[16px]'>
+                            <Button 
+                                type="button"
+                                onClick={() => console.log("novo dataflow")}
+                                className="w-[200px]"
                             />
                         </div>
                     </div>
