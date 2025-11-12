@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import PageTitle from '../components/PageTitle';
 import Table from '../components/Table';
+import SearchBar from '../components/dataflows/SearchBar';
 
 import { type Dataflow } from '../../shared/types/dashboard';
 import { MockDataflowRepository } from '../../infrastructure/storage/repositories/MockDataflowRepository';
@@ -63,7 +64,7 @@ function Dataflows() {
             <div className="mt-4.5 container max-w-[800px]">
                 <section>
                     <div className='flex flex-row align-middle justify-center gap-6'>
-                        
+                        <SearchBar />
                     </div>
                 </section>
             </div>
