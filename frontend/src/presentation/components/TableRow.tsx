@@ -14,7 +14,7 @@ function TableRow<T extends RowData = RowData>({ data, columns }: TableRowProps<
 
             if (statusValue === 'alerta') {
                 return (
-                    <td key={column.key} className="px-5 py-4 text-sm text-[#1F2937]">
+                    <td key={column.key} className="px-4 py-4 text-sm text-[#1F2937]">
                         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-2xl text-[13px] font-medium bg-amber-100 text-amber-800">⚠ Alerta</span>
                     </td>
                 );

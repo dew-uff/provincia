@@ -67,9 +67,11 @@ function Dataflows() {
             </div>
             <div className="mt-4.5 container max-w-[800px]">
                 <section>
-                    <div className='flex flex-row align-middle justify-between gap-6 bg-white rounded-xl shadow-sm'>
-                        <SearchBar />
-                        <div className="flex flex-col align-middle justify-center ">
+                    <div className='w-full flex flex-row align-middle justify-between bg-white rounded-xl shadow-sm gap-6'>
+                        <div className='pl-6 py-4 flex flex-1'>
+                            <SearchBar />
+                        </div>
+                        <div className="flex flex-col max-w-[200px] align-middle justify-center ">
                             <Dropdown
                                 options={DATAFLOW_STATUS_OPTIONS}
                                 value={selectedStatus}
@@ -78,12 +80,14 @@ function Dataflows() {
                                 }}
                             />
                         </div>
-                        <div className='w-full flex px-[10px] py-[16px]'>
+                        <div className='w-full max-w-[120px] flex pr-[20px] py-[20px]'>
                             <Button 
                                 type="button"
                                 onClick={() => console.log("novo dataflow")}
-                                className="w-[200px]"
-                            />
+                                className="w-full cursor-pointer align-middle justify-center"
+                            >
+                                + Novo
+                            </Button>
                         </div>
                     </div>
                 </section>
