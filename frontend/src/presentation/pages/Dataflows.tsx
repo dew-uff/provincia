@@ -62,6 +62,11 @@ function Dataflows() {
         return statusMatch && searchMatch;
     });
 
+    // Debug: Log dos dados filtrados
+    console.log('Search term:', searchTerm);
+    console.log('Filtered dataflows count:', filteredDataFlows.length);
+    console.log('Filtered data:', filteredDataFlows);
+
     if (loading) {
         return (
             <main className='flex flex-col items-center p-6 w-full h-full'>
