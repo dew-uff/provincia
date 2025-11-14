@@ -27,6 +27,7 @@ function Dataflows() {
     const [dataFlows, setDataFlows] = useState<Dataflow[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [selectedStatus, setSelectedStatus] = useState<string>('all');
+    const [searchTerm, setSearchTerm] = useState<string>('');
 
     useEffect(() => {
         const loadDataflows = async () => {
@@ -43,6 +44,23 @@ function Dataflows() {
 
         loadDataflows();
     }, []);
+
+    // Filtrar dataflows com base no termo de busca e status
+    const filteredDataFlows = dataFlows.filter((dataflow) => {
+        // Filtro de status
+        const statusMatch = selectedStatus === 'all' || dataflow.status === selectedStatus;
+
+        // Filtro de busca - buscar em todos os campos textuais
+        const searchLower = searchTerm.toLowerCase();
+        const searchMatch = searchTerm === '' ||
+            dataflow.id.toLowerCase().includes(searchLower) ||
+            dataflow.name.toLowerCase().includes(searchLower) ||
+            dataflow.user.toLowerCase().includes(searchLower) ||
+            dataflow.lastExecution.toLowerCase().includes(searchLower) ||
+            dataflow.status.toLowerCase().includes(searchLower);
+
+        return statusMatch && searchMatch;
+    });
 
     if (loading) {
         return (
@@ -69,7 +87,7 @@ function Dataflows() {
                 <section>
                     <div className='w-full flex flex-row align-middle justify-between bg-white rounded-xl shadow-sm gap-6'>
                         <div className='pl-6 py-4 flex flex-1'>
-                            <SearchBar />
+                            <SearchBar value={searchTerm} onChange={setSearchTerm} />
                         </div>
                         <div className="flex flex-col max-w-[200px] align-middle justify-center ">
                             <Dropdown
@@ -95,7 +113,7 @@ function Dataflows() {
             <div className="mt-9 container max-w-[800px]">
                 <section>
                     <div className="w-full bg-white rounded-xl">
-                        <Table colNames={colNames} columns={columns} data={dataFlows} />
+                        <Table colNames={colNames} columns={columns} data={filteredDataFlows} />
                     </div>
                 </section>
             </div>
