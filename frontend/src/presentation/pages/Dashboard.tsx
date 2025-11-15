@@ -19,7 +19,6 @@ const columns = [
 
 const dashboardRepository = new MockDashboardRepository();
 
-// Função helper para converter "DD/MM HH:mm" para Date
 const parseLastExecution = (dateString: string): Date => {
     const currentYear = new Date().getFullYear();
     const [datePart, timePart] = dateString.split(' ');
@@ -29,17 +28,14 @@ const parseLastExecution = (dateString: string): Date => {
     return new Date(currentYear, month - 1, day, hour, minute);
 };
 
-// Função helper para converter data ISO (YYYY-MM-DD) para Date local sem problemas de timezone
 const parseISODateLocal = (dateString: string): Date => {
     const [year, month, day] = dateString.split('-').map(Number);
     return new Date(year, month - 1, day);
 };
 
-// Função para filtrar dataflows baseado no período selecionado
 const filterDataflowsByPeriod = (dataflows: Dataflow[], periodValue: TimePeriodValue): Dataflow[] => {
     const now = new Date();
 
-    // Se for período customizado
     if (periodValue.type === 'custom' && periodValue.dateRange) {
         const startDate = parseISODateLocal(periodValue.dateRange.startDate);
         const endDate = parseISODateLocal(periodValue.dateRange.endDate);
@@ -51,7 +47,6 @@ const filterDataflowsByPeriod = (dataflows: Dataflow[], periodValue: TimePeriodV
         });
     }
 
-    // Se for período preset
     if (periodValue.type === 'preset') {
         let daysAgo = 30; // Default
 
@@ -113,7 +108,6 @@ const Dashboard: React.FC = () => {
         loadDashboardData();
     }, []);
 
-    // Filtra os dataflows baseado no período selecionado
     const filteredDataFlows = useMemo(() => {
         return filterDataflowsByPeriod(dataFlows, selectedPeriod);
     }, [dataFlows, selectedPeriod]);
