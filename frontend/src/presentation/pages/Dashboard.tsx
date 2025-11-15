@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import PageTitle from '../components/PageTitle';
 import TimePeriodDropdown from '../components/TimePeriodDropdown';
 import MetricsCard from '../components/dashboard/MetricsCard';
@@ -18,6 +18,72 @@ const columns = [
 ];
 
 const dashboardRepository = new MockDashboardRepository();
+
+// Função helper para converter "DD/MM HH:mm" para Date
+const parseLastExecution = (dateString: string): Date => {
+    const currentYear = new Date().getFullYear();
+    const [datePart, timePart] = dateString.split(' ');
+    const [day, month] = datePart.split('/').map(Number);
+    const [hour, minute] = timePart.split(':').map(Number);
+
+    return new Date(currentYear, month - 1, day, hour, minute);
+};
+
+// Função helper para converter data ISO (YYYY-MM-DD) para Date local sem problemas de timezone
+const parseISODateLocal = (dateString: string): Date => {
+    const [year, month, day] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day);
+};
+
+// Função para filtrar dataflows baseado no período selecionado
+const filterDataflowsByPeriod = (dataflows: Dataflow[], periodValue: TimePeriodValue): Dataflow[] => {
+    const now = new Date();
+
+    // Se for período customizado
+    if (periodValue.type === 'custom' && periodValue.dateRange) {
+        const startDate = parseISODateLocal(periodValue.dateRange.startDate);
+        const endDate = parseISODateLocal(periodValue.dateRange.endDate);
+        endDate.setHours(23, 59, 59, 999); // Inclui o dia completo
+
+        return dataflows.filter(df => {
+            const executionDate = parseLastExecution(df.lastExecution);
+            return executionDate >= startDate && executionDate <= endDate;
+        });
+    }
+
+    // Se for período preset
+    if (periodValue.type === 'preset') {
+        let daysAgo = 30; // Default
+
+        switch (periodValue.period) {
+            case 'last7days':
+                daysAgo = 7;
+                break;
+            case 'last30days':
+                daysAgo = 30;
+                break;
+            case 'last60days':
+                daysAgo = 60;
+                break;
+            case 'last90days':
+                daysAgo = 90;
+                break;
+            case 'last365days':
+                daysAgo = 365;
+                break;
+        }
+
+        const cutoffDate = new Date(now);
+        cutoffDate.setDate(cutoffDate.getDate() - daysAgo);
+
+        return dataflows.filter(df => {
+            const executionDate = parseLastExecution(df.lastExecution);
+            return executionDate >= cutoffDate;
+        });
+    }
+
+    return dataflows;
+};
 
 const Dashboard: React.FC = () => {
     const [selectedPeriod, setSelectedPeriod] = useState<TimePeriodValue>({
@@ -46,6 +112,11 @@ const Dashboard: React.FC = () => {
 
         loadDashboardData();
     }, []);
+
+    // Filtra os dataflows baseado no período selecionado
+    const filteredDataFlows = useMemo(() => {
+        return filterDataflowsByPeriod(dataFlows, selectedPeriod);
+    }, [dataFlows, selectedPeriod]);
 
     if (loading) {
         return (
@@ -91,7 +162,7 @@ const Dashboard: React.FC = () => {
                     </div>
                     <div className="w-full bg-white rounded-xl">
                         <div>
-                            <Table colNames={colNames} columns={columns} data={dataFlows} />
+                            <Table colNames={colNames} columns={columns} data={filteredDataFlows} />
                         </div>
                     </div>
                 </section>

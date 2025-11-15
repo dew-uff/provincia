@@ -10,6 +10,12 @@ interface TimePeriodDropdownProps {
     containerClassName?: string;
 }
 
+// Função helper para converter data ISO (YYYY-MM-DD) para Date local sem problemas de timezone
+const parseISODateLocal = (dateString: string): Date => {
+    const [year, month, day] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day);
+};
+
 const TimePeriodDropdown: React.FC<TimePeriodDropdownProps> = ({
     options,
     value,
@@ -27,8 +33,8 @@ const TimePeriodDropdown: React.FC<TimePeriodDropdownProps> = ({
     // Determina o label a ser exibido no botão
     const getDisplayLabel = () => {
         if (value.type === 'custom' && value.dateRange) {
-            const start = new Date(value.dateRange.startDate).toLocaleDateString('pt-BR');
-            const end = new Date(value.dateRange.endDate).toLocaleDateString('pt-BR');
+            const start = parseISODateLocal(value.dateRange.startDate).toLocaleDateString('pt-BR');
+            const end = parseISODateLocal(value.dateRange.endDate).toLocaleDateString('pt-BR');
             return `${start} - ${end}`;
         }
         const selectedOption = options.find(opt => opt.value === value.period);
@@ -189,7 +195,7 @@ const TimePeriodDropdown: React.FC<TimePeriodDropdownProps> = ({
                                         />
                                     </svg>
                                     <span className="text-xs text-blue-700">
-                                        {new Date(dateRange.startDate).toLocaleDateString('pt-BR')} até {new Date(dateRange.endDate).toLocaleDateString('pt-BR')}
+                                        {parseISODateLocal(dateRange.startDate).toLocaleDateString('pt-BR')} até {parseISODateLocal(dateRange.endDate).toLocaleDateString('pt-BR')}
                                     </span>
                                 </div>
                             )}
