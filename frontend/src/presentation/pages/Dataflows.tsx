@@ -45,12 +45,9 @@ function Dataflows() {
         loadDataflows();
     }, []);
 
-    // Filtrar dataflows com base no termo de busca e status
     const filteredDataFlows = dataFlows.filter((dataflow) => {
-        // Filtro de status
         const statusMatch = selectedStatus === 'all' || dataflow.status === selectedStatus;
 
-        // Filtro de busca - buscar em todos os campos textuais
         const searchLower = searchTerm.toLowerCase();
         const searchMatch = searchTerm === '' ||
             dataflow.id.toLowerCase().includes(searchLower) ||
@@ -61,12 +58,6 @@ function Dataflows() {
 
         return statusMatch && searchMatch;
     });
-
-    // Debug: Log dos dados filtrados
-    console.log('Search term:', searchTerm);
-    console.log('Filtered dataflows count:', filteredDataFlows.length);
-    console.log('Filtered data:', filteredDataFlows);
-
     if (loading) {
         return (
             <main className='flex flex-col items-center p-6 w-full h-full'>
@@ -78,15 +69,23 @@ function Dataflows() {
     }
 
     /**TODO:
-     * - Implements search bar and filters
      * - Implements pagination
      * - Implements actions (view and download)
      */
 
     return (
         <main className='flex flex-col items-center p-6 w-full h-full'>
-            <div className='container w-full max-w-[800px] flex flex-row align-middle justify-between mb-4'>
+            <div className='container w-full max-w-[800px] flex flex-row align-middle justify-between'>
                 <PageTitle title="Dataflows" />
+                <div className='w-full max-w-[120px] flex'>
+                    <Button 
+                        type="button"
+                        onClick={() => console.log("novo dataflow")}
+                        className="w-full cursor-pointer align-middle justify-center"
+                    >
+                        + Novo
+                    </Button>
+                </div>
             </div>
             <div className="mt-4.5 container max-w-[800px]">
                 <section>
@@ -102,15 +101,6 @@ function Dataflows() {
                                     setSelectedStatus(value);
                                 }}
                             />
-                        </div>
-                        <div className='w-full max-w-[120px] flex pr-[20px] py-[20px]'>
-                            <Button 
-                                type="button"
-                                onClick={() => console.log("novo dataflow")}
-                                className="w-full cursor-pointer align-middle justify-center"
-                            >
-                                + Novo
-                            </Button>
                         </div>
                     </div>
                 </section>

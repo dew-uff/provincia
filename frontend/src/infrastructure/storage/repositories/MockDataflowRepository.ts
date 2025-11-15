@@ -3,7 +3,7 @@ import { type Dataflow, type StatusOption } from '../../../shared/types/dashboar
 
 // ⬇️ OPÇÕES DE STATUS PARA DROPDOWN
 export const DATAFLOW_STATUS_OPTIONS: StatusOption[] = [
-    { label: 'Todos', value: 'all' },
+    { label: 'Todos os status', value: 'all' },
     { label: 'OK', value: 'ok' },
     { label: 'Alerta', value: 'alerta' },
     { label: 'Erro', value: 'erro' }

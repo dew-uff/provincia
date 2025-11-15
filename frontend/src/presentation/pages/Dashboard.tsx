@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import PageTitle from '../components/PageTitle';
-import Dropdown from '../components/Dropdown';
+import TimePeriodDropdown from '../components/TimePeriodDropdown';
 import MetricsCard from '../components/dashboard/MetricsCard';
 import Table from '../components/Table';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { MockDashboardRepository } from '../../infrastructure/storage/repositories/MockDashboardRepository';
-import { type Dataflow, type DashboardMetrics, type PeriodOption } from '../../shared/types/dashboard';
+import { type Dataflow, type DashboardMetrics, type PeriodOption, type TimePeriodValue } from '../../shared/types/dashboard';
 
 const colNames = ['Nome', 'Usuário', 'Última Execução', 'Status'];
 
@@ -20,7 +20,10 @@ const columns = [
 const dashboardRepository = new MockDashboardRepository();
 
 const Dashboard: React.FC = () => {
-    const [selectedPeriod, setSelectedPeriod] = useState<string>('option1');
+    const [selectedPeriod, setSelectedPeriod] = useState<TimePeriodValue>({
+        type: 'preset',
+        period: 'last30days'
+    });
     const [dataFlows, setDataFlows] = useState<Dataflow[]>([]);
     const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
     const [periodOptions, setPeriodOptions] = useState<PeriodOption[]>([]);
@@ -58,13 +61,15 @@ const Dashboard: React.FC = () => {
         <main className='flex flex-col items-center p-6 w-full h-full'>
             <div className='container w-full max-w-[800px] flex flex-row align-middle justify-between mb-4'>
                 <PageTitle title="Dashboard" />
-                <Dropdown
+                <TimePeriodDropdown
                     options={periodOptions}
                     value={selectedPeriod}
                     onChange={(value) => {
                         setSelectedPeriod(value);
+                        console.log('Período selecionado:', value);
                     }}
-                 />
+                    containerClassName="w-[280px]"
+                />
             </div>
             <div className="mt-4.5 container max-w-[800px]">
                 <section>

@@ -23,6 +23,19 @@ export interface PeriodOption {
     value: string;
 }
 
+// Tipo para intervalo de datas customizado
+export interface DateRange {
+    startDate: string;  // Formato ISO: YYYY-MM-DD
+    endDate: string;    // Formato ISO: YYYY-MM-DD
+}
+
+// Tipo para valor de período de tempo (preset ou customizado)
+export interface TimePeriodValue {
+    type: 'preset' | 'custom';
+    period: string;  // 'last7days' | 'last30days' | 'last60days' | 'last90days' | 'last365days' | 'custom'
+    dateRange?: DateRange;  // Presente apenas quando type === 'custom'
+}
+
 // Tipo para opções de status de dataflow
 export interface StatusOption {
     label: string;
