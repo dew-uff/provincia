@@ -6,6 +6,7 @@ import SearchBar from '../components/dataflows/SearchBar';
 import Pagination from '../components/Pagination';
 import EmptyState from '../components/EmptyState';
 import ActiveFilters, { type ActiveFilter } from '../components/ActiveFilters';
+import Loader from '../components/Loader';
 
 import { type Dataflow, type TimePeriodValue, type PeriodOption } from '../../shared/types/dashboard';
 import { MockDataflowRepository } from '../../infrastructure/storage/repositories/MockDataflowRepository';
@@ -154,7 +155,6 @@ function Dataflows() {
         setCurrentPage(1);
     };
 
-    // Função para obter o label do período
     const getPeriodLabel = (period: TimePeriodValue): string => {
         if (period.type === 'custom' && period.dateRange) {
             const start = new Date(period.dateRange.startDate).toLocaleDateString('pt-BR');
@@ -165,13 +165,11 @@ function Dataflows() {
         return option?.label || '';
     };
 
-    // Função para obter o label do status
     const getStatusLabel = (statusValue: string): string => {
         const option = DATAFLOW_STATUS_OPTIONS.find(opt => opt.value === statusValue);
         return option?.label || statusValue;
     };
 
-    // Construir lista de filtros ativos
     const activeFilters: ActiveFilter[] = [];
 
     if (searchTerm) {
@@ -202,18 +200,8 @@ function Dataflows() {
     }
 
     if (loading) {
-        return (
-            <main className='flex flex-col items-center p-6 w-full h-full'>
-                <div className='container w-full max-w-[900px] flex flex-row align-middle justify-center'>
-                    <p>Carregando...</p>
-                </div>
-            </main>
-        );
+        return <Loader />;
     }
-
-    /**TODO:
-     * - Implements actions (view and download)
-     */
 
     return (
         <main className='flex flex-col items-center p-6 w-full h-full'>

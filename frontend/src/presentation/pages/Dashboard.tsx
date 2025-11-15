@@ -3,6 +3,8 @@ import PageTitle from '../components/PageTitle';
 import TimePeriodDropdown from '../components/TimePeriodDropdown';
 import MetricsCard from '../components/dashboard/MetricsCard';
 import Table from '../components/Table';
+import Loader from '../components/Loader';
+import EmptyState from '../components/EmptyState';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { MockDashboardRepository } from '../../infrastructure/storage/repositories/MockDashboardRepository';
@@ -48,6 +50,11 @@ const filterDataflowsByPeriod = (dataflows: Dataflow[], periodValue: TimePeriodV
     }
 
     if (periodValue.type === 'preset') {
+        // Se for 'all', retorna todos os dataflows
+        if (periodValue.period === 'all') {
+            return dataflows;
+        }
+
         let daysAgo = 30; // Default
 
         switch (periodValue.period) {
@@ -83,7 +90,7 @@ const filterDataflowsByPeriod = (dataflows: Dataflow[], periodValue: TimePeriodV
 const Dashboard: React.FC = () => {
     const [selectedPeriod, setSelectedPeriod] = useState<TimePeriodValue>({
         type: 'preset',
-        period: 'last30days'
+        period: 'all'
     });
     const [dataFlows, setDataFlows] = useState<Dataflow[]>([]);
     const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
@@ -112,14 +119,16 @@ const Dashboard: React.FC = () => {
         return filterDataflowsByPeriod(dataFlows, selectedPeriod);
     }, [dataFlows, selectedPeriod]);
 
+    // Função para limpar filtros
+    const handleClearFilters = () => {
+        setSelectedPeriod({
+            type: 'preset',
+            period: 'all'
+        });
+    };
+
     if (loading) {
-        return (
-            <main className='flex flex-col items-center p-6 w-full h-full'>
-                <div className='container w-full max-w-[900px] flex flex-row align-middle justify-center'>
-                    <p>Carregando...</p>
-                </div>
-            </main>
-        );
+        return <Loader />;
     }
 
     return (
@@ -129,16 +138,14 @@ const Dashboard: React.FC = () => {
                 <TimePeriodDropdown
                     options={periodOptions}
                     value={selectedPeriod}
-                    onChange={(value) => {
-                        setSelectedPeriod(value);
-                        console.log('Período selecionado:', value);
-                    }}
-                    containerClassName="w-[280px]"
+                    onChange={setSelectedPeriod}
+                    placeholder="Selecione o período"
+                    containerClassName="w-[300px]"
                 />
             </div>
             <div className="mt-4.5 container max-w-[900px]">
                 <section>
-                    <div className='flex flex-row align-middle justify-center gap-6'>
+                    <div className='flex flex-row align-middle justify-between gap-6'>
                         <MetricsCard numbers={metrics?.dataflows.toString() || '0'} indicator="Dataflows" />
                         <MetricsCard numbers={metrics?.executions.toLocaleString('pt-BR') || '0'} indicator="Execuções" />
                         <MetricsCard numbers={metrics?.activeUsers.toString() || '0'} indicator="Usuários Ativos" />
@@ -155,9 +162,18 @@ const Dashboard: React.FC = () => {
                         </a>
                     </div>
                     <div className="w-full bg-white rounded-xl">
-                        <div>
-                            <Table colNames={colNames} columns={columns} data={filteredDataFlows} />
-                        </div>
+                        {filteredDataFlows.length === 0 ? (
+                            <EmptyState
+                                title="Nenhum resultado encontrado"
+                                message="Não encontramos nenhum dataflow no período selecionado. Tente ajustar o filtro de período."
+                                showClearButton={true}
+                                onClearFilters={handleClearFilters}
+                            />
+                        ) : (
+                            <div>
+                                <Table colNames={colNames} columns={columns} data={filteredDataFlows} />
+                            </div>
+                        )}
                     </div>
                 </section>
             </div>

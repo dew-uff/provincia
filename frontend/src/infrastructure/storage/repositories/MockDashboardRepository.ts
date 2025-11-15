@@ -40,11 +40,12 @@ const MOCK_DATAFLOWS: Dataflow[] = [
 ];
 
 const MOCK_PERIOD_OPTIONS: PeriodOption[] = [
+    { label: 'Todos os períodos', value: 'all' },
     { label: 'Últimos 7 dias', value: 'last7days' },
     { label: 'Últimos 30 dias', value: 'last30days' },
-    { label: 'Últimos 60 dias', value: 'last60days' },
-    { label: 'Últimos 90 dias', value: 'last90days' },
-    { label: 'Últimos 365 dias', value: 'last365days' }
+    { label: 'Últimos 2 meses', value: 'last60days' },
+    { label: 'Últimos 3 meses', value: 'last90days' },
+    { label: 'Últimos 12 meses', value: 'last365days' }
 ];
 
 export class MockDashboardRepository implements IDashboardRepository {
