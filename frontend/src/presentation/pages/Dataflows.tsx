@@ -32,32 +32,27 @@ const PERIOD_OPTIONS: PeriodOption[] = [
 
 const dataflowRepository = new MockDataflowRepository();
 
-// Função auxiliar para converter "DD/MM HH:mm" para Date
 const parseLastExecutionDate = (dateStr: string): Date => {
     const currentYear = new Date().getFullYear();
     const [datePart, timePart] = dateStr.split(' ');
     const [day, month] = datePart.split('/').map(Number);
     const [hours, minutes] = timePart.split(':').map(Number);
 
-    // Assume o ano atual
     return new Date(currentYear, month - 1, day, hours, minutes);
 };
 
-// Função para obter o intervalo de datas baseado no período selecionado
 const getDateRangeFromPeriod = (period: TimePeriodValue): { start: Date; end: Date } => {
     const now = new Date();
     const end = now;
     let start = new Date();
 
     if (period.type === 'custom' && period.dateRange) {
-        // Período customizado
         const [startYear, startMonth, startDay] = period.dateRange.startDate.split('-').map(Number);
         const [endYear, endMonth, endDay] = period.dateRange.endDate.split('-').map(Number);
         start = new Date(startYear, startMonth - 1, startDay, 0, 0, 0);
         return { start, end: new Date(endYear, endMonth - 1, endDay, 23, 59, 59) };
     }
 
-    // Períodos preset
     switch (period.period) {
         case 'last7days':
             start.setDate(now.getDate() - 7);
@@ -108,10 +103,8 @@ function Dataflows() {
     }, []);
 
     const filteredDataFlows = dataFlows.filter((dataflow) => {
-        // Filtro por status
         const statusMatch = selectedStatus === 'all' || dataflow.status === selectedStatus;
 
-        // Filtro por busca
         const searchLower = searchTerm.toLowerCase();
         const searchMatch = searchTerm === '' ||
             dataflow.id.toLowerCase().includes(searchLower) ||
@@ -130,7 +123,7 @@ function Dataflows() {
     if (loading) {
         return (
             <main className='flex flex-col items-center p-6 w-full h-full'>
-                <div className='container w-full max-w-[800px] flex flex-row align-middle justify-center'>
+                <div className='container w-full max-w-[900px] flex flex-row align-middle justify-center'>
                     <p>Carregando...</p>
                 </div>
             </main>
@@ -144,7 +137,7 @@ function Dataflows() {
 
     return (
         <main className='flex flex-col items-center p-6 w-full h-full'>
-            <div className='container w-full max-w-[800px] flex flex-row align-middle justify-between'>
+            <div className='container w-full max-w-[900px] flex flex-row align-middle justify-between'>
                 <PageTitle title="Dataflows" />
                 <div className='w-full max-w-[120px] flex'>
                     <Button 
@@ -156,7 +149,7 @@ function Dataflows() {
                     </Button>
                 </div>
             </div>
-            <div className="mt-4.5 container max-w-[800px]">
+            <div className="mt-4.5 container max-w-[900px]">
                 <section>
                     <div className='w-full flex flex-row items-center bg-white rounded-xl shadow-sm gap-4 px-6 py-4'>
                         <div className='flex-[2]'>
@@ -182,7 +175,7 @@ function Dataflows() {
                     </div>
                 </section>
             </div>
-            <div className="mt-9 container max-w-[800px]">
+            <div className="mt-9 container max-w-[900px]">
                 <section>
                     <div className="w-full bg-white rounded-xl">
                         <Table colNames={colNames} columns={columns} data={filteredDataFlows} />

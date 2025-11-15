@@ -115,7 +115,7 @@ const Dashboard: React.FC = () => {
     if (loading) {
         return (
             <main className='flex flex-col items-center p-6 w-full h-full'>
-                <div className='container w-full max-w-[800px] flex flex-row align-middle justify-center'>
+                <div className='container w-full max-w-[900px] flex flex-row align-middle justify-center'>
                     <p>Carregando...</p>
                 </div>
             </main>
@@ -124,7 +124,7 @@ const Dashboard: React.FC = () => {
 
     return (
         <main className='flex flex-col items-center p-6 w-full h-full'>
-            <div className='container w-full max-w-[800px] flex flex-row align-middle justify-between mb-4'>
+            <div className='container w-full max-w-[900px] flex flex-row align-middle justify-between mb-4'>
                 <PageTitle title="Dashboard" />
                 <TimePeriodDropdown
                     options={periodOptions}
@@ -136,7 +136,7 @@ const Dashboard: React.FC = () => {
                     containerClassName="w-[280px]"
                 />
             </div>
-            <div className="mt-4.5 container max-w-[800px]">
+            <div className="mt-4.5 container max-w-[900px]">
                 <section>
                     <div className='flex flex-row align-middle justify-center gap-6'>
                         <MetricsCard numbers={metrics?.dataflows.toString() || '0'} indicator="Dataflows" />
@@ -146,7 +146,7 @@ const Dashboard: React.FC = () => {
                     </div>
                 </section>
             </div>
-            <div className="mt-9 container max-w-[800px]">
+            <div className="mt-9 container max-w-[900px]">
                 <section>
                     <div className="w-full flex flex-row justify-end items-center pb-4">
                         <a href="#" className="text-[#2563EB] text-sm">
