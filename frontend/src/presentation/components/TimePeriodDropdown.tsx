@@ -93,7 +93,7 @@ const TimePeriodDropdown: React.FC<TimePeriodDropdownProps> = ({
                     ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
                 `}
             >
-                <span className="text-sm">{getDisplayLabel()}</span>
+                <span>{getDisplayLabel()}</span>
                 <svg
                     className={`w-5 h-5 transition-transform ${isOpen ? 'rotate-180' : ''}`}
                     fill="none"
@@ -107,7 +107,7 @@ const TimePeriodDropdown: React.FC<TimePeriodDropdownProps> = ({
             {isOpen && (
                 <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg overflow-hidden">
                     {/* Opções preset */}
-                    <div className="max-h-48 overflow-y-auto">
+                    <div className="max-h-60 overflow-auto">
                         {options.map((option) => {
                             const isSelected = value.type === 'preset' && option.value === value.period;
                             return (
@@ -115,14 +115,14 @@ const TimePeriodDropdown: React.FC<TimePeriodDropdownProps> = ({
                                     key={option.value}
                                     onClick={() => handlePresetSelect(option.value)}
                                     className={`
-                                        px-4 py-2 cursor-pointer hover:bg-gray-100 text-sm
+                                        px-4 py-2 cursor-pointer hover:bg-gray-100
                                         ${isSelected ? 'bg-blue-50 text-blue-600 font-medium' : ''}
                                     `}
                                 >
                                     <span>{option.label}</span>
                                     {isSelected && (
                                         <svg
-                                            className="w-4 h-4 inline-block ml-2"
+                                            className="w-5 h-5 inline-block ml-2"
                                             fill="currentColor"
                                             viewBox="0 0 20 20"
                                         >

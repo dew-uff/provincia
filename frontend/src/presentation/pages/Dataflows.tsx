@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import PageTitle from '../components/PageTitle';
 import Table from '../components/Table';
 import SearchBar from '../components/dataflows/SearchBar';
+import Pagination from '../components/Pagination';
+import EmptyState from '../components/EmptyState';
 
 import { type Dataflow, type TimePeriodValue, type PeriodOption } from '../../shared/types/dashboard';
 import { MockDataflowRepository } from '../../infrastructure/storage/repositories/MockDataflowRepository';
@@ -22,12 +24,15 @@ const columns = [
     { key: 'actions', type: 'actions' as const }
 ];
 
+const ITEMS_PER_PAGE = 15;
+
 const PERIOD_OPTIONS: PeriodOption[] = [
+    { label: 'Todos os períodos', value: 'all' },
     { label: 'Últimos 7 dias', value: 'last7days' },
     { label: 'Últimos 30 dias', value: 'last30days' },
-    { label: 'Últimos 60 dias', value: 'last60days' },
-    { label: 'Últimos 90 dias', value: 'last90days' },
-    { label: 'Últimos 365 dias', value: 'last365days' }
+    { label: 'Últimos 2 meses', value: 'last60days' },
+    { label: 'Últimos 3 meses', value: 'last90days' },
+    { label: 'Últimos 12 meses', value: 'last365days' }
 ];
 
 const dataflowRepository = new MockDataflowRepository();
@@ -54,6 +59,10 @@ const getDateRangeFromPeriod = (period: TimePeriodValue): { start: Date; end: Da
     }
 
     switch (period.period) {
+        case 'all':
+            // Data muito antiga para incluir todos os registros
+            start = new Date(1900, 0, 1);
+            break;
         case 'last7days':
             start.setDate(now.getDate() - 7);
             break;
@@ -70,7 +79,7 @@ const getDateRangeFromPeriod = (period: TimePeriodValue): { start: Date; end: Da
             start.setDate(now.getDate() - 365);
             break;
         default:
-            start.setDate(now.getDate() - 30);
+            start = new Date(1900, 0, 1);
     }
 
     return { start, end };
@@ -83,8 +92,9 @@ function Dataflows() {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [selectedPeriod, setSelectedPeriod] = useState<TimePeriodValue>({
         type: 'preset',
-        period: 'last30days'
+        period: 'all'
     });
+    const [currentPage, setCurrentPage] = useState<number>(1);
 
     useEffect(() => {
         const loadDataflows = async () => {
@@ -120,6 +130,29 @@ function Dataflows() {
 
         return statusMatch && searchMatch && periodMatch;
     });
+
+    // Cálculos de paginação
+    const totalPages = Math.ceil(filteredDataFlows.length / ITEMS_PER_PAGE);
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    const paginatedDataFlows = filteredDataFlows.slice(startIndex, endIndex);
+
+    // Reset para página 1 quando os filtros mudarem
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [selectedStatus, searchTerm, selectedPeriod]);
+
+    // Função para limpar todos os filtros
+    const handleClearFilters = () => {
+        setSelectedStatus('all');
+        setSearchTerm('');
+        setSelectedPeriod({
+            type: 'preset',
+            period: 'all'
+        });
+        setCurrentPage(1);
+    };
+
     if (loading) {
         return (
             <main className='flex flex-col items-center p-6 w-full h-full'>
@@ -131,7 +164,6 @@ function Dataflows() {
     }
 
     /**TODO:
-     * - Implements pagination
      * - Implements actions (view and download)
      */
 
@@ -178,7 +210,23 @@ function Dataflows() {
             <div className="mt-9 container max-w-[900px]">
                 <section>
                     <div className="w-full bg-white rounded-xl">
-                        <Table colNames={colNames} columns={columns} data={filteredDataFlows} />
+                        {filteredDataFlows.length === 0 ? (
+                            <EmptyState
+                                title="Nenhum resultado encontrado"
+                                message="Não encontramos nenhum dataflow com os filtros selecionados. Tente ajustar seus critérios de busca."
+                                showClearButton={true}
+                                onClearFilters={handleClearFilters}
+                            />
+                        ) : (
+                            <>
+                                <Table colNames={colNames} columns={columns} data={paginatedDataFlows} />
+                                <Pagination
+                                    currentPage={currentPage}
+                                    totalPages={totalPages}
+                                    onPageChange={setCurrentPage}
+                                />
+                            </>
+                        )}
                     </div>
                 </section>
             </div>
