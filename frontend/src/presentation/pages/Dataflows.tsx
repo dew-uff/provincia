@@ -5,6 +5,7 @@ import Table from '../components/Table';
 import SearchBar from '../components/dataflows/SearchBar';
 import Pagination from '../components/Pagination';
 import EmptyState from '../components/EmptyState';
+import ActiveFilters, { type ActiveFilter } from '../components/ActiveFilters';
 
 import { type Dataflow, type TimePeriodValue, type PeriodOption } from '../../shared/types/dashboard';
 import { MockDataflowRepository } from '../../infrastructure/storage/repositories/MockDataflowRepository';
@@ -153,6 +154,53 @@ function Dataflows() {
         setCurrentPage(1);
     };
 
+    // Função para obter o label do período
+    const getPeriodLabel = (period: TimePeriodValue): string => {
+        if (period.type === 'custom' && period.dateRange) {
+            const start = new Date(period.dateRange.startDate).toLocaleDateString('pt-BR');
+            const end = new Date(period.dateRange.endDate).toLocaleDateString('pt-BR');
+            return `${start} - ${end}`;
+        }
+        const option = PERIOD_OPTIONS.find(opt => opt.value === period.period);
+        return option?.label || '';
+    };
+
+    // Função para obter o label do status
+    const getStatusLabel = (statusValue: string): string => {
+        const option = DATAFLOW_STATUS_OPTIONS.find(opt => opt.value === statusValue);
+        return option?.label || statusValue;
+    };
+
+    // Construir lista de filtros ativos
+    const activeFilters: ActiveFilter[] = [];
+
+    if (searchTerm) {
+        activeFilters.push({
+            id: 'search',
+            label: 'Busca',
+            value: searchTerm,
+            onRemove: () => setSearchTerm('')
+        });
+    }
+
+    if (selectedStatus !== 'all') {
+        activeFilters.push({
+            id: 'status',
+            label: 'Status',
+            value: getStatusLabel(selectedStatus),
+            onRemove: () => setSelectedStatus('all')
+        });
+    }
+
+    if (selectedPeriod.period !== 'all') {
+        activeFilters.push({
+            id: 'period',
+            label: 'Período',
+            value: getPeriodLabel(selectedPeriod),
+            onRemove: () => setSelectedPeriod({ type: 'preset', period: 'all' })
+        });
+    }
+
     if (loading) {
         return (
             <main className='flex flex-col items-center p-6 w-full h-full'>
@@ -183,27 +231,38 @@ function Dataflows() {
             </div>
             <div className="mt-4.5 container max-w-[900px]">
                 <section>
-                    <div className='w-full flex flex-row items-center bg-white rounded-xl shadow-sm gap-4 px-6 py-4'>
-                        <div className='flex-[2]'>
-                            <SearchBar value={searchTerm} onChange={setSearchTerm} />
+                    <div className='w-full flex flex-col bg-white rounded-xl shadow-sm px-6 py-4 gap-4'>
+                        <div className='w-full flex flex-row items-center gap-4'>
+                            <div className='flex-[2]'>
+                                <SearchBar value={searchTerm} onChange={setSearchTerm} />
+                            </div>
+                            <div className="flex-1">
+                                <Dropdown
+                                    options={DATAFLOW_STATUS_OPTIONS}
+                                    value={selectedStatus}
+                                    onChange={(value) => {
+                                        setSelectedStatus(value);
+                                    }}
+                                />
+                            </div>
+                            <div className="flex-1">
+                                <TimePeriodDropdown
+                                    options={PERIOD_OPTIONS}
+                                    value={selectedPeriod}
+                                    onChange={setSelectedPeriod}
+                                    placeholder="Selecione o período"
+                                />
+                            </div>
                         </div>
-                        <div className="flex-1">
-                            <Dropdown
-                                options={DATAFLOW_STATUS_OPTIONS}
-                                value={selectedStatus}
-                                onChange={(value) => {
-                                    setSelectedStatus(value);
-                                }}
-                            />
-                        </div>
-                        <div className="flex-1">
-                            <TimePeriodDropdown
-                                options={PERIOD_OPTIONS}
-                                value={selectedPeriod}
-                                onChange={setSelectedPeriod}
-                                placeholder="Selecione o período"
-                            />
-                        </div>
+
+                        {activeFilters.length > 0 && (
+                            <div className='w-full pt-2 border-t border-gray-200 transition-all duration-300 ease-in-out'>
+                                <ActiveFilters
+                                    filters={activeFilters}
+                                    onClearAll={handleClearFilters}
+                                />
+                            </div>
+                        )}
                     </div>
                 </section>
             </div>
