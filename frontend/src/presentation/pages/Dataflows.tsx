@@ -125,7 +125,6 @@ function Dataflows() {
             dataflow.lastExecution.toLowerCase().includes(searchLower) ||
             dataflow.status.toLowerCase().includes(searchLower);
 
-        // Filtro por período
         const dateRange = getDateRangeFromPeriod(selectedPeriod);
         const executionDate = parseLastExecutionDate(dataflow.lastExecution);
         const periodMatch = executionDate >= dateRange.start && executionDate <= dateRange.end;
@@ -133,18 +132,15 @@ function Dataflows() {
         return statusMatch && searchMatch && periodMatch;
     });
 
-    // Cálculos de paginação
     const totalPages = Math.ceil(filteredDataFlows.length / ITEMS_PER_PAGE);
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
     const paginatedDataFlows = filteredDataFlows.slice(startIndex, endIndex);
 
-    // Reset para página 1 quando os filtros mudarem
     useEffect(() => {
         setCurrentPage(1);
     }, [selectedStatus, searchTerm, selectedPeriod]);
 
-    // Função para limpar todos os filtros
     const handleClearFilters = () => {
         setSelectedStatus('all');
         setSearchTerm('');
@@ -204,7 +200,7 @@ function Dataflows() {
     }
 
     return (
-        <main className='flex flex-col items-center p-6 w-full h-full'>
+        <div className='flex flex-col items-center p-6 w-full h-full'>
             <div className='container w-full max-w-[900px] flex flex-row align-middle justify-between'>
                 <PageTitle title="Dataflows" />
                 <div className='w-full max-w-[120px] flex'>
@@ -277,7 +273,7 @@ function Dataflows() {
                     </div>
                 </section>
             </div>
-        </main>
+        </div>
     );
 }
 
