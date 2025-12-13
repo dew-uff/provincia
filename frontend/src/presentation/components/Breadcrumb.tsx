@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronRight, faHome } from '@fortawesome/free-solid-svg-icons';
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
 interface BreadcrumbItem {
     label: string;
@@ -19,13 +19,12 @@ const Breadcrumb: React.FC = () => {
     const location = useLocation();
 
     const generateBreadcrumbs = (): BreadcrumbItem[] => {
-        const breadcrumbs: BreadcrumbItem[] = [
-            { label: 'Dashboard', path: '/dashboard' }
-        ];
-
         const currentPath = location.pathname;
+        const breadcrumbs: BreadcrumbItem[] = [];
 
-        if (currentPath !== '/dashboard' && routeMap[currentPath]) {
+        // Para páginas de mesmo nível (Dashboard, Dataflows, Consultas, Upload),
+        // mostra apenas a página atual, sem hierarquia
+        if (routeMap[currentPath]) {
             breadcrumbs.push({
                 label: routeMap[currentPath],
                 path: currentPath
@@ -52,26 +51,14 @@ const Breadcrumb: React.FC = () => {
                             />
                         )}
                         {isLast ? (
-                            <span className="text-[#6B7280] font-medium flex items-center gap-1.5">
-                                {isFirst && (
-                                    <FontAwesomeIcon
-                                        icon={faHome}
-                                        className="text-[#6B7280]"
-                                    />
-                                )}
+                            <span className="text-[#6B7280] font-medium">
                                 {item.label}
                             </span>
                         ) : (
                             <Link
                                 to={item.path || '/'}
-                                className="text-[#2563EB] hover:text-[#1D4ED8] transition-colors duration-200 flex items-center gap-1.5"
+                                className="text-[#2563EB] hover:text-[#1D4ED8] transition-colors duration-200"
                             >
-                                {isFirst && (
-                                    <FontAwesomeIcon
-                                        icon={faHome}
-                                        className="text-[#2563EB]"
-                                    />
-                                )}
                                 {item.label}
                             </Link>
                         )}
