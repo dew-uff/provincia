@@ -7,6 +7,7 @@ import Dashboard from '../../presentation/pages/Dashboard';
 import Dataflows from '../../presentation/pages/Dataflows';
 import Search from '../../presentation/pages/Search';
 import Upload from '../../presentation/pages/Upload';
+import Details from '../../presentation/pages/Details';
 
 export const AppRoutes = () => {
     return (
@@ -25,6 +26,7 @@ export const AppRoutes = () => {
             >
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/dataflows" element={<Dataflows />} />
+                <Route path="/details/:id" element={<Details />} />
                 <Route path="/consultas" element={<Search />} />
                 <Route path="/upload" element={<Upload />} />
             </Route>

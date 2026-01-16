@@ -40,12 +40,19 @@ const PERIOD_OPTIONS: PeriodOption[] = [
 const dataflowRepository = new MockDataflowRepository();
 
 const parseLastExecutionDate = (dateStr: string): Date => {
-    const currentYear = new Date().getFullYear();
+    const now = new Date();
+    const currentYear = now.getFullYear();
     const [datePart, timePart] = dateStr.split(' ');
     const [day, month] = datePart.split('/').map(Number);
     const [hours, minutes] = timePart.split(':').map(Number);
 
-    return new Date(currentYear, month - 1, day, hours, minutes);
+    let parsedDate = new Date(currentYear, month - 1, day, hours, minutes);
+
+    if (parsedDate > now) {
+        parsedDate = new Date(currentYear - 1, month - 1, day, hours, minutes);
+    }
+
+    return parsedDate;
 };
 
 const getDateRangeFromPeriod = (period: TimePeriodValue): { start: Date; end: Date } => {
@@ -62,7 +69,6 @@ const getDateRangeFromPeriod = (period: TimePeriodValue): { start: Date; end: Da
 
     switch (period.period) {
         case 'all':
-            // Data muito antiga para incluir todos os registros
             start = new Date(1900, 0, 1);
             break;
         case 'last7days':

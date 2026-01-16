@@ -1,7 +1,9 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { MockDataflowRepository } from '../../infrastructure/storage/repositories/MockDataflowRepository';
+import { type Dataflow } from '../../shared/types/dashboard';
 
 interface BreadcrumbItem {
     label: string;
@@ -15,12 +17,49 @@ const routeMap: Record<string, string> = {
     '/upload': 'Upload',
 };
 
+const dataflowRepository = new MockDataflowRepository();
+
 const Breadcrumb: React.FC = () => {
     const location = useLocation();
+    const params = useParams<{ id: string }>();
+    const [dataflow, setDataflow] = useState<Dataflow | null>(null);
+
+    useEffect(() => {
+        const loadDataflow = async () => {
+            const detailsMatch = location.pathname.match(/^\/details\/(.+)$/);
+
+            if (detailsMatch && params.id) {
+                try {
+                    const data = await dataflowRepository.getDataflowById(params.id);
+                    setDataflow(data);
+                } catch (error) {
+                    console.error('Erro ao carregar dataflow:', error);
+                }
+            } else {
+                setDataflow(null);
+            }
+        };
+
+        loadDataflow();
+    }, [location.pathname, params.id]);
 
     const generateBreadcrumbs = (): BreadcrumbItem[] => {
         const currentPath = location.pathname;
         const breadcrumbs: BreadcrumbItem[] = [];
+
+        // Verifica se é uma rota de detalhes
+        const detailsMatch = currentPath.match(/^\/details\/(.+)$/);
+        if (detailsMatch && dataflow) {
+            breadcrumbs.push({
+                label: 'Dataflows',
+                path: '/dataflows'
+            });
+            breadcrumbs.push({
+                label: dataflow.name,
+                path: currentPath
+            });
+            return breadcrumbs;
+        }
 
         // Para páginas de mesmo nível (Dashboard, Dataflows, Consultas, Upload),
         // mostra apenas a página atual, sem hierarquia

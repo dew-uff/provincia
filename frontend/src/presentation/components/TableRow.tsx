@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import type { ColumnConfig, RowData } from '../../shared/types/table';
 
 interface TableRowProps<T extends RowData = RowData> {
@@ -38,9 +39,12 @@ function TableRow<T extends RowData = RowData>({ data, columns }: TableRowProps<
         if (column.type === 'actions') {
             return (
                 <td key={column.key} className="px-5 py-4 text-sm text-[#1F2937]">
-                    <button className="text-blue-600 hover:text-blue-800 font-medium">
+                    <Link
+                        to={`/details/${data.id}`}
+                        className="text-blue-600 hover:text-blue-800 font-medium"
+                    >
                         Ver detalhes
-                    </button>
+                    </Link>
                 </td>
             );
         }
