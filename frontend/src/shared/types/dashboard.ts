@@ -9,6 +9,32 @@ export interface Dataflow extends RowData {
     status: StatusType;
 }
 
+// Tipo para execução de dataflow
+export interface DataflowExecution {
+    id: string;
+    timestamp: string;
+    user: string;
+    duration: string;
+    tasks: string;
+    status: 'ok' | 'warning' | 'error';
+}
+
+// Tipo para dataset gerado
+export interface DataflowDataset {
+    id: string;
+    name: string;
+    records: number;
+    size: string;
+    created: string;
+}
+
+// Tipo para dependência de dataflow
+export interface DataflowDependency {
+    id: string;
+    name: string;
+    description: string;
+}
+
 // Tipo para detalhes completos do Dataflow
 export interface DataflowDetails extends Dataflow {
     description: string;
@@ -22,6 +48,10 @@ export interface DataflowDetails extends Dataflow {
     lastModified: string;
     modifiedBy: string;
     tags: string[];
+    recentExecutions: DataflowExecution[];
+    datasets: DataflowDataset[];
+    upstreamDependencies: DataflowDependency[];
+    downstreamDependencies: DataflowDependency[];
 }
 
 // Tipo para Métricas do Dashboard

@@ -1,5 +1,12 @@
 import { type IDataflowRepository } from '../../../domain/repositories/IDataflowRepository';
-import { type Dataflow, type DataflowDetails, type StatusOption } from '../../../shared/types/dashboard';
+import {
+    type Dataflow,
+    type DataflowDetails,
+    type DataflowExecution,
+    type DataflowDataset,
+    type DataflowDependency,
+    type StatusOption
+} from '../../../shared/types/dashboard';
 
 // ⬇️ OPÇÕES DE STATUS PARA DROPDOWN
 export const DATAFLOW_STATUS_OPTIONS: StatusOption[] = [
@@ -363,6 +370,30 @@ const MOCK_DATAFLOWS: Dataflow[] = [
     }
 ];
 
+// ⬇️ FUNÇÕES AUXILIARES PARA GERAR DADOS MOCKADOS
+const generateExecutions = (dataflowId: string, user: string, status: string): DataflowExecution[] => {
+    const statuses: Array<'ok' | 'warning' | 'error'> = status === 'ok'
+        ? ['ok', 'ok', 'ok', 'ok', 'warning']
+        : status === 'alerta'
+        ? ['ok', 'warning', 'ok', 'warning', 'ok']
+        : ['error', 'ok', 'error', 'warning', 'ok'];
+
+    return [
+        { id: `${dataflowId}-exec-1`, timestamp: "06/10/2024 09:15:32", user, duration: "42min 18s", tasks: "12/12", status: statuses[0] },
+        { id: `${dataflowId}-exec-2`, timestamp: "05/10/2024 09:15:28", user, duration: "45min 02s", tasks: "12/12", status: statuses[1] },
+        { id: `${dataflowId}-exec-3`, timestamp: "04/10/2024 09:15:45", user, duration: "41min 55s", tasks: "12/12", status: statuses[2] },
+        { id: `${dataflowId}-exec-4`, timestamp: "03/10/2024 09:16:01", user, duration: "44min 30s", tasks: "11/12", status: statuses[3] },
+        { id: `${dataflowId}-exec-5`, timestamp: "02/10/2024 09:15:12", user, duration: "43min 45s", tasks: "12/12", status: statuses[4] },
+    ];
+};
+
+const generateDatasets = (dataflowId: string, baseName: string): DataflowDataset[] => [
+    { id: `${dataflowId}-ds-1`, name: `${baseName}_output_20241006`, records: 158432, size: "2.3 GB", created: "06/10/2024" },
+    { id: `${dataflowId}-ds-2`, name: `${baseName}_output_20241005`, records: 156891, size: "2.2 GB", created: "05/10/2024" },
+    { id: `${dataflowId}-ds-3`, name: `${baseName}_output_20241004`, records: 157234, size: "2.3 GB", created: "04/10/2024" },
+    { id: `${dataflowId}-ds-4`, name: `${baseName}_metadata_20241006`, records: 45621, size: "156 MB", created: "06/10/2024" },
+];
+
 // ⬇️ DADOS MOCKADOS DE DETALHES DOS DATAFLOWS
 const MOCK_DATAFLOW_DETAILS: Record<string, Omit<DataflowDetails, keyof Dataflow>> = {
     '1': {
@@ -376,7 +407,16 @@ const MOCK_DATAFLOW_DETAILS: Record<string, Omit<DataflowDetails, keyof Dataflow
         successRate: 98.5,
         lastModified: "05/10/2024",
         modifiedBy: "maria.falci",
-        tags: ["video", "ml", "extração", "frames"]
+        tags: ["video", "ml", "extração", "frames"],
+        recentExecutions: generateExecutions('1', 'maria.falci', 'ok'),
+        datasets: generateDatasets('1', 'frames_extracted'),
+        upstreamDependencies: [
+            { id: '3', name: 'Coleta vídeos', description: 'Fornece vídeos brutos para extração' }
+        ],
+        downstreamDependencies: [
+            { id: '6', name: 'Classificação de imagens', description: 'Consome os frames extraídos' },
+            { id: '2', name: 'Treinamento DNN', description: 'Utiliza frames para treinamento de modelos' }
+        ]
     },
     '2': {
         description: "Treinamento de redes neurais profundas para classificação de imagens. Utiliza GPU para acelerar o processo de treinamento.",
@@ -389,7 +429,16 @@ const MOCK_DATAFLOW_DETAILS: Record<string, Omit<DataflowDetails, keyof Dataflow
         successRate: 95.2,
         lastModified: "06/10/2024",
         modifiedBy: "maria.falci",
-        tags: ["deep-learning", "treinamento", "gpu", "classificação"]
+        tags: ["deep-learning", "treinamento", "gpu", "classificação"],
+        recentExecutions: generateExecutions('2', 'maria.falci', 'ok'),
+        datasets: generateDatasets('2', 'model_training'),
+        upstreamDependencies: [
+            { id: '1', name: 'Extração frames', description: 'Fornece frames processados para treinamento' },
+            { id: '6', name: 'Classificação de imagens', description: 'Fornece labels para treinamento supervisionado' }
+        ],
+        downstreamDependencies: [
+            { id: '20', name: 'Recomendação de produtos', description: 'Utiliza modelos treinados para recomendações visuais' }
+        ]
     },
     '3': {
         description: "Coleta automatizada de vídeos de múltiplas fontes para alimentar pipelines de processamento de mídia.",
@@ -402,7 +451,13 @@ const MOCK_DATAFLOW_DETAILS: Record<string, Omit<DataflowDetails, keyof Dataflow
         successRate: 92.8,
         lastModified: "04/10/2024",
         modifiedBy: "joao.silva",
-        tags: ["coleta", "vídeo", "api", "automação"]
+        tags: ["coleta", "vídeo", "api", "automação"],
+        recentExecutions: generateExecutions('3', 'joao.silva', 'ok'),
+        datasets: generateDatasets('3', 'videos_collected'),
+        upstreamDependencies: [],
+        downstreamDependencies: [
+            { id: '1', name: 'Extração frames', description: 'Processa os vídeos coletados' }
+        ]
     },
     '4': {
         description: "Pré-processamento de dados brutos incluindo limpeza, normalização e transformação para análise posterior.",
@@ -415,7 +470,16 @@ const MOCK_DATAFLOW_DETAILS: Record<string, Omit<DataflowDetails, keyof Dataflow
         successRate: 88.5,
         lastModified: "05/10/2024",
         modifiedBy: "ana.souza",
-        tags: ["etl", "limpeza", "transformação", "dados"]
+        tags: ["etl", "limpeza", "transformação", "dados"],
+        recentExecutions: generateExecutions('4', 'ana.souza', 'alerta'),
+        datasets: generateDatasets('4', 'preprocessed_data'),
+        upstreamDependencies: [
+            { id: '13', name: 'Limpeza de dados', description: 'Fornece dados limpos iniciais' }
+        ],
+        downstreamDependencies: [
+            { id: '5', name: 'Análise de sentimentos', description: 'Utiliza dados pré-processados' },
+            { id: '9', name: 'Previsão de vendas', description: 'Consome dados normalizados' }
+        ]
     },
     '5': {
         description: "Análise de sentimentos em textos de redes sociais e reviews utilizando modelos de NLP.",
@@ -428,7 +492,15 @@ const MOCK_DATAFLOW_DETAILS: Record<string, Omit<DataflowDetails, keyof Dataflow
         successRate: 96.7,
         lastModified: "05/10/2024",
         modifiedBy: "carlos.mendes",
-        tags: ["nlp", "sentimento", "social", "análise"]
+        tags: ["nlp", "sentimento", "social", "análise"],
+        recentExecutions: generateExecutions('5', 'carlos.mendes', 'ok'),
+        datasets: generateDatasets('5', 'sentiment_analysis'),
+        upstreamDependencies: [
+            { id: '4', name: 'Pre-processamento', description: 'Fornece textos normalizados' }
+        ],
+        downstreamDependencies: [
+            { id: '16', name: 'Análise de churn', description: 'Utiliza scores de sentimento para predição' }
+        ]
     },
     '6': {
         description: "Classificação automática de imagens usando modelos CNN pré-treinados e fine-tuning customizado.",
@@ -441,7 +513,15 @@ const MOCK_DATAFLOW_DETAILS: Record<string, Omit<DataflowDetails, keyof Dataflow
         successRate: 65.3,
         lastModified: "04/10/2024",
         modifiedBy: "patricia.santos",
-        tags: ["imagem", "classificação", "cnn", "ml"]
+        tags: ["imagem", "classificação", "cnn", "ml"],
+        recentExecutions: generateExecutions('6', 'patricia.santos', 'erro'),
+        datasets: generateDatasets('6', 'image_classifications'),
+        upstreamDependencies: [
+            { id: '1', name: 'Extração frames', description: 'Fornece frames para classificação' }
+        ],
+        downstreamDependencies: [
+            { id: '2', name: 'Treinamento DNN', description: 'Utiliza classificações como labels' }
+        ]
     },
     '7': {
         description: "Detecção de anomalias em séries temporais de métricas de infraestrutura e aplicações.",
@@ -454,7 +534,15 @@ const MOCK_DATAFLOW_DETAILS: Record<string, Omit<DataflowDetails, keyof Dataflow
         successRate: 99.1,
         lastModified: "04/10/2024",
         modifiedBy: "roberto.lima",
-        tags: ["monitoramento", "anomalia", "alertas", "infraestrutura"]
+        tags: ["monitoramento", "anomalia", "alertas", "infraestrutura"],
+        recentExecutions: generateExecutions('7', 'roberto.lima', 'ok'),
+        datasets: generateDatasets('7', 'anomaly_detection'),
+        upstreamDependencies: [
+            { id: '10', name: 'Processamento de logs', description: 'Fornece métricas de logs processados' }
+        ],
+        downstreamDependencies: [
+            { id: '12', name: 'Agregação de métricas', description: 'Consolida alertas de anomalias' }
+        ]
     },
     '8': {
         description: "Segmentação de clientes baseada em comportamento de compra e engajamento.",
@@ -467,7 +555,16 @@ const MOCK_DATAFLOW_DETAILS: Record<string, Omit<DataflowDetails, keyof Dataflow
         successRate: 91.4,
         lastModified: "03/10/2024",
         modifiedBy: "juliana.costa",
-        tags: ["segmentação", "clientes", "marketing", "comportamento"]
+        tags: ["segmentação", "clientes", "marketing", "comportamento"],
+        recentExecutions: generateExecutions('8', 'juliana.costa', 'alerta'),
+        datasets: generateDatasets('8', 'customer_segments'),
+        upstreamDependencies: [
+            { id: '13', name: 'Limpeza de dados', description: 'Fornece dados de clientes limpos' }
+        ],
+        downstreamDependencies: [
+            { id: '16', name: 'Análise de churn', description: 'Utiliza segmentos para análise' },
+            { id: '20', name: 'Recomendação de produtos', description: 'Personaliza por segmento' }
+        ]
     },
     '9': {
         description: "Modelo preditivo de vendas usando séries temporais e variáveis exógenas.",
@@ -480,7 +577,16 @@ const MOCK_DATAFLOW_DETAILS: Record<string, Omit<DataflowDetails, keyof Dataflow
         successRate: 94.6,
         lastModified: "03/10/2024",
         modifiedBy: "fernando.alves",
-        tags: ["previsão", "vendas", "time-series", "forecast"]
+        tags: ["previsão", "vendas", "time-series", "forecast"],
+        recentExecutions: generateExecutions('9', 'fernando.alves', 'ok'),
+        datasets: generateDatasets('9', 'sales_forecast'),
+        upstreamDependencies: [
+            { id: '4', name: 'Pre-processamento', description: 'Fornece dados históricos processados' },
+            { id: '11', name: 'ETL dados financeiros', description: 'Fornece dados financeiros consolidados' }
+        ],
+        downstreamDependencies: [
+            { id: '19', name: 'Dashboard executivo', description: 'Exibe previsões de vendas' }
+        ]
     },
     '10': {
         description: "Processamento e análise de logs de aplicações para identificação de padrões e erros.",
@@ -493,7 +599,13 @@ const MOCK_DATAFLOW_DETAILS: Record<string, Omit<DataflowDetails, keyof Dataflow
         successRate: 99.8,
         lastModified: "02/10/2024",
         modifiedBy: "amanda.rocha",
-        tags: ["logs", "observabilidade", "elk", "streaming"]
+        tags: ["logs", "observabilidade", "elk", "streaming"],
+        recentExecutions: generateExecutions('10', 'amanda.rocha', 'ok'),
+        datasets: generateDatasets('10', 'processed_logs'),
+        upstreamDependencies: [],
+        downstreamDependencies: [
+            { id: '7', name: 'Detecção de anomalias', description: 'Analisa padrões nos logs' }
+        ]
     },
     '11': {
         description: "ETL de dados financeiros consolidando informações de múltiplas fontes para reporting.",
@@ -506,7 +618,14 @@ const MOCK_DATAFLOW_DETAILS: Record<string, Omit<DataflowDetails, keyof Dataflow
         successRate: 97.3,
         lastModified: "02/10/2024",
         modifiedBy: "ricardo.pereira",
-        tags: ["finanças", "etl", "reporting", "consolidação"]
+        tags: ["finanças", "etl", "reporting", "consolidação"],
+        recentExecutions: generateExecutions('11', 'ricardo.pereira', 'ok'),
+        datasets: generateDatasets('11', 'financial_data'),
+        upstreamDependencies: [],
+        downstreamDependencies: [
+            { id: '9', name: 'Previsão de vendas', description: 'Utiliza dados financeiros históricos' },
+            { id: '19', name: 'Dashboard executivo', description: 'Exibe KPIs financeiros' }
+        ]
     },
     '12': {
         description: "Agregação de métricas de performance de múltiplos sistemas para dashboard executivo.",
@@ -519,7 +638,16 @@ const MOCK_DATAFLOW_DETAILS: Record<string, Omit<DataflowDetails, keyof Dataflow
         successRate: 72.1,
         lastModified: "01/10/2024",
         modifiedBy: "beatriz.martins",
-        tags: ["métricas", "agregação", "performance", "dashboard"]
+        tags: ["métricas", "agregação", "performance", "dashboard"],
+        recentExecutions: generateExecutions('12', 'beatriz.martins', 'erro'),
+        datasets: generateDatasets('12', 'aggregated_metrics'),
+        upstreamDependencies: [
+            { id: '7', name: 'Detecção de anomalias', description: 'Fornece alertas consolidados' },
+            { id: '10', name: 'Processamento de logs', description: 'Fornece métricas de logs' }
+        ],
+        downstreamDependencies: [
+            { id: '19', name: 'Dashboard executivo', description: 'Exibe métricas agregadas' }
+        ]
     },
     '13': {
         description: "Pipeline de limpeza e padronização de dados cadastrais de clientes e produtos.",
@@ -532,7 +660,15 @@ const MOCK_DATAFLOW_DETAILS: Record<string, Omit<DataflowDetails, keyof Dataflow
         successRate: 98.9,
         lastModified: "01/10/2024",
         modifiedBy: "gustavo.ferreira",
-        tags: ["limpeza", "dados", "qualidade", "padronização"]
+        tags: ["limpeza", "dados", "qualidade", "padronização"],
+        recentExecutions: generateExecutions('13', 'gustavo.ferreira', 'ok'),
+        datasets: generateDatasets('13', 'clean_data'),
+        upstreamDependencies: [],
+        downstreamDependencies: [
+            { id: '4', name: 'Pre-processamento', description: 'Utiliza dados limpos' },
+            { id: '8', name: 'Segmentação de clientes', description: 'Utiliza cadastros padronizados' },
+            { id: '15', name: 'Validação de dados', description: 'Valida dados limpos' }
+        ]
     },
     '14': {
         description: "Sincronização bidirecional de dados entre sistemas internos e CRM Salesforce.",
@@ -545,7 +681,13 @@ const MOCK_DATAFLOW_DETAILS: Record<string, Omit<DataflowDetails, keyof Dataflow
         successRate: 89.2,
         lastModified: "30/09/2024",
         modifiedBy: "laura.barbosa",
-        tags: ["crm", "sincronização", "salesforce", "integração"]
+        tags: ["crm", "sincronização", "salesforce", "integração"],
+        recentExecutions: generateExecutions('14', 'laura.barbosa', 'alerta'),
+        datasets: generateDatasets('14', 'crm_sync'),
+        upstreamDependencies: [
+            { id: '13', name: 'Limpeza de dados', description: 'Fornece dados padronizados' }
+        ],
+        downstreamDependencies: []
     },
     '15': {
         description: "Validação automática de qualidade de dados com regras de negócio configuráveis.",
@@ -558,7 +700,13 @@ const MOCK_DATAFLOW_DETAILS: Record<string, Omit<DataflowDetails, keyof Dataflow
         successRate: 99.5,
         lastModified: "30/09/2024",
         modifiedBy: "pedro.oliveira",
-        tags: ["validação", "qualidade", "dados", "regras"]
+        tags: ["validação", "qualidade", "dados", "regras"],
+        recentExecutions: generateExecutions('15', 'pedro.oliveira', 'ok'),
+        datasets: generateDatasets('15', 'validation_results'),
+        upstreamDependencies: [
+            { id: '13', name: 'Limpeza de dados', description: 'Valida dados após limpeza' }
+        ],
+        downstreamDependencies: []
     },
     '16': {
         description: "Análise preditiva de churn de clientes usando modelos de machine learning.",
@@ -571,7 +719,16 @@ const MOCK_DATAFLOW_DETAILS: Record<string, Omit<DataflowDetails, keyof Dataflow
         successRate: 93.8,
         lastModified: "29/09/2024",
         modifiedBy: "camila.dias",
-        tags: ["churn", "previsão", "clientes", "ml"]
+        tags: ["churn", "previsão", "clientes", "ml"],
+        recentExecutions: generateExecutions('16', 'camila.dias', 'ok'),
+        datasets: generateDatasets('16', 'churn_predictions'),
+        upstreamDependencies: [
+            { id: '5', name: 'Análise de sentimentos', description: 'Fornece scores de sentimento' },
+            { id: '8', name: 'Segmentação de clientes', description: 'Fornece segmentos' }
+        ],
+        downstreamDependencies: [
+            { id: '19', name: 'Dashboard executivo', description: 'Exibe métricas de churn' }
+        ]
     },
     '17': {
         description: "Processamento de linguagem natural para extração de entidades e classificação de textos.",
@@ -584,7 +741,14 @@ const MOCK_DATAFLOW_DETAILS: Record<string, Omit<DataflowDetails, keyof Dataflow
         successRate: 87.6,
         lastModified: "29/09/2024",
         modifiedBy: "marcos.teixeira",
-        tags: ["nlp", "ner", "classificação", "texto"]
+        tags: ["nlp", "ner", "classificação", "texto"],
+        recentExecutions: generateExecutions('17', 'marcos.teixeira', 'alerta'),
+        datasets: generateDatasets('17', 'nlp_entities'),
+        upstreamDependencies: [],
+        downstreamDependencies: [
+            { id: '5', name: 'Análise de sentimentos', description: 'Utiliza entidades extraídas' },
+            { id: '18', name: 'Mineração de textos', description: 'Processa entidades para insights' }
+        ]
     },
     '18': {
         description: "Mineração de textos para descoberta de padrões e insights em documentos não estruturados.",
@@ -597,7 +761,13 @@ const MOCK_DATAFLOW_DETAILS: Record<string, Omit<DataflowDetails, keyof Dataflow
         successRate: 95.4,
         lastModified: "28/09/2024",
         modifiedBy: "rafaela.cunha",
-        tags: ["mineração", "texto", "insights", "documentos"]
+        tags: ["mineração", "texto", "insights", "documentos"],
+        recentExecutions: generateExecutions('18', 'rafaela.cunha', 'ok'),
+        datasets: generateDatasets('18', 'text_mining'),
+        upstreamDependencies: [
+            { id: '17', name: 'Processamento NLP', description: 'Fornece entidades e classificações' }
+        ],
+        downstreamDependencies: []
     },
     '19': {
         description: "Consolidação de KPIs executivos de todas as áreas da empresa em dashboard unificado.",
@@ -610,7 +780,16 @@ const MOCK_DATAFLOW_DETAILS: Record<string, Omit<DataflowDetails, keyof Dataflow
         successRate: 68.9,
         lastModified: "28/09/2024",
         modifiedBy: "thiago.moraes",
-        tags: ["kpi", "executivo", "dashboard", "consolidação"]
+        tags: ["kpi", "executivo", "dashboard", "consolidação"],
+        recentExecutions: generateExecutions('19', 'thiago.moraes', 'erro'),
+        datasets: generateDatasets('19', 'executive_kpis'),
+        upstreamDependencies: [
+            { id: '9', name: 'Previsão de vendas', description: 'Fornece forecast de vendas' },
+            { id: '11', name: 'ETL dados financeiros', description: 'Fornece dados financeiros' },
+            { id: '12', name: 'Agregação de métricas', description: 'Fornece métricas de performance' },
+            { id: '16', name: 'Análise de churn', description: 'Fornece métricas de retenção' }
+        ],
+        downstreamDependencies: []
     },
     '20': {
         description: "Sistema de recomendação de produtos baseado em comportamento de navegação e compras.",
@@ -623,7 +802,14 @@ const MOCK_DATAFLOW_DETAILS: Record<string, Omit<DataflowDetails, keyof Dataflow
         successRate: 96.2,
         lastModified: "27/09/2024",
         modifiedBy: "luciana.gomes",
-        tags: ["recomendação", "produtos", "ml", "personalização"]
+        tags: ["recomendação", "produtos", "ml", "personalização"],
+        recentExecutions: generateExecutions('20', 'luciana.gomes', 'ok'),
+        datasets: generateDatasets('20', 'recommendations'),
+        upstreamDependencies: [
+            { id: '2', name: 'Treinamento DNN', description: 'Fornece modelos de similaridade visual' },
+            { id: '8', name: 'Segmentação de clientes', description: 'Fornece perfis de clientes' }
+        ],
+        downstreamDependencies: []
     }
 };
 
@@ -640,7 +826,11 @@ const generateDefaultDetails = (dataflow: Dataflow): DataflowDetails => ({
     successRate: dataflow.status === 'ok' ? 95.0 : dataflow.status === 'alerta' ? 85.0 : 70.0,
     lastModified: dataflow.lastExecution.split(' ')[0] + "/2024",
     modifiedBy: dataflow.user,
-    tags: ["automação", "dados"]
+    tags: ["automação", "dados"],
+    recentExecutions: generateExecutions(dataflow.id, dataflow.user, dataflow.status),
+    datasets: generateDatasets(dataflow.id, dataflow.name.toLowerCase().replace(/\s+/g, '_')),
+    upstreamDependencies: [],
+    downstreamDependencies: []
 });
 
 export class MockDataflowRepository implements IDataflowRepository {
