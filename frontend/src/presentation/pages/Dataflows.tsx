@@ -2,18 +2,17 @@ import { useEffect, useState } from 'react';
 
 import PageTitle from '../components/PageTitle';
 import Table from '../components/Table';
-import SearchBar from '../components/dataflows/SearchBar';
 import Pagination from '../components/Pagination';
 import EmptyState from '../components/EmptyState';
-import ActiveFilters, { type ActiveFilter } from '../components/ActiveFilters';
+import { type ActiveFilter } from '../components/ActiveFilters';
 import Loader from '../components/Loader';
+import FilterBar from '../components/FilterBar';
+import TimePeriodDropdown from '../components/TimePeriodDropdown';
+import Button from '../components/Button';
 
 import { type Dataflow, type TimePeriodValue, type PeriodOption } from '../../shared/types/dashboard';
 import { MockDataflowRepository } from '../../infrastructure/storage/repositories/MockDataflowRepository';
 import { DATAFLOW_STATUS_OPTIONS } from '../../infrastructure/storage/repositories/MockDataflowRepository';
-import Dropdown from '../components/Dropdown';
-import Button from '../components/Button';
-import TimePeriodDropdown from '../components/TimePeriodDropdown';
 
 const colNames = ['ID','Nome', 'Usuário', 'Última Execução', 'Status', 'Ações'];
 
@@ -221,39 +220,39 @@ function Dataflows() {
             </div>
             <div className="mt-4.5 container max-w-[900px]">
                 <section>
-                    <div className='w-full flex flex-col bg-white rounded-xl shadow-sm px-6 py-4 gap-4'>
-                        <div className='w-full flex flex-row items-center gap-4'>
-                            <div className='flex-[2]'>
-                                <SearchBar value={searchTerm} onChange={setSearchTerm} />
-                            </div>
-                            <div className="flex-1">
-                                <Dropdown
-                                    options={DATAFLOW_STATUS_OPTIONS}
-                                    value={selectedStatus}
-                                    onChange={(value) => {
-                                        setSelectedStatus(value);
-                                    }}
-                                />
-                            </div>
-                            <div className="flex-1">
-                                <TimePeriodDropdown
-                                    options={PERIOD_OPTIONS}
-                                    value={selectedPeriod}
-                                    onChange={setSelectedPeriod}
-                                    placeholder="Selecione o período"
-                                />
-                            </div>
-                        </div>
-
-                        {activeFilters.length > 0 && (
-                            <div className='w-full pt-2 border-t border-gray-200 transition-all duration-300 ease-in-out'>
-                                <ActiveFilters
-                                    filters={activeFilters}
-                                    onClearAll={handleClearFilters}
-                                />
-                            </div>
-                        )}
-                    </div>
+                    <FilterBar
+                        search={{
+                            value: searchTerm,
+                            onChange: setSearchTerm,
+                            placeholder: "Buscar dataflows...",
+                            flex: 2
+                        }}
+                        dropdowns={[
+                            {
+                                id: 'status',
+                                options: DATAFLOW_STATUS_OPTIONS,
+                                value: selectedStatus,
+                                onChange: setSelectedStatus,
+                                flex: 1
+                            }
+                        ]}
+                        customElements={[
+                            {
+                                id: 'period',
+                                element: (
+                                    <TimePeriodDropdown
+                                        options={PERIOD_OPTIONS}
+                                        value={selectedPeriod}
+                                        onChange={setSelectedPeriod}
+                                        placeholder="Selecione o período"
+                                    />
+                                ),
+                                flex: 1
+                            }
+                        ]}
+                        activeFilters={activeFilters}
+                        onClearAll={handleClearFilters}
+                    />
                 </section>
             </div>
             <div className="mt-9 container max-w-[900px]">
