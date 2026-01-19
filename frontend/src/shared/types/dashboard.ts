@@ -9,6 +9,21 @@ export interface Dataflow extends RowData {
     status: StatusType;
 }
 
+// Tipo para detalhes completos do Dataflow
+export interface DataflowDetails extends Dataflow {
+    description: string;
+    created: string;
+    version: string;
+    schedule: string;
+    inputSources: string[];
+    outputDestinations: string[];
+    avgDuration: string;
+    successRate: number;
+    lastModified: string;
+    modifiedBy: string;
+    tags: string[];
+}
+
 // Tipo para Métricas do Dashboard
 export interface DashboardMetrics {
     dataflows: number;
