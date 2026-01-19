@@ -40,7 +40,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
     onClearAll
 }) => {
     return (
-        <div className="w-full flex flex-col bg-white rounded-xl shadow-sm px-6 py-4 gap-4">
+        <div className="w-full flex flex-col gap-4">
             <div className="w-full flex flex-row items-center gap-4">
                 {search && (
                     <div style={{ flex: search.flex || 2 }}>

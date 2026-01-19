@@ -220,39 +220,41 @@ function Dataflows() {
             </div>
             <div className="mt-4.5 container max-w-[900px]">
                 <section>
-                    <FilterBar
-                        search={{
-                            value: searchTerm,
-                            onChange: setSearchTerm,
-                            placeholder: "Buscar dataflows...",
-                            flex: 2
-                        }}
-                        dropdowns={[
-                            {
-                                id: 'status',
-                                options: DATAFLOW_STATUS_OPTIONS,
-                                value: selectedStatus,
-                                onChange: setSelectedStatus,
-                                flex: 1
-                            }
-                        ]}
-                        customElements={[
-                            {
-                                id: 'period',
-                                element: (
-                                    <TimePeriodDropdown
-                                        options={PERIOD_OPTIONS}
-                                        value={selectedPeriod}
-                                        onChange={setSelectedPeriod}
-                                        placeholder="Selecione o período"
-                                    />
-                                ),
-                                flex: 1
-                            }
-                        ]}
-                        activeFilters={activeFilters}
-                        onClearAll={handleClearFilters}
-                    />
+                    <div className="bg-white rounded-xl shadow-sm px-6 py-4">
+                        <FilterBar
+                            search={{
+                                value: searchTerm,
+                                onChange: setSearchTerm,
+                                placeholder: "Buscar dataflows...",
+                                flex: 2
+                            }}
+                            dropdowns={[
+                                {
+                                    id: 'status',
+                                    options: DATAFLOW_STATUS_OPTIONS,
+                                    value: selectedStatus,
+                                    onChange: setSelectedStatus,
+                                    flex: 1
+                                }
+                            ]}
+                            customElements={[
+                                {
+                                    id: 'period',
+                                    element: (
+                                        <TimePeriodDropdown
+                                            options={PERIOD_OPTIONS}
+                                            value={selectedPeriod}
+                                            onChange={setSelectedPeriod}
+                                            placeholder="Selecione o período"
+                                        />
+                                    ),
+                                    flex: 1
+                                }
+                            ]}
+                            activeFilters={activeFilters}
+                            onClearAll={handleClearFilters}
+                        />
+                    </div>
                 </section>
             </div>
             <div className="mt-9 container max-w-[900px]">

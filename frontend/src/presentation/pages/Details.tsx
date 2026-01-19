@@ -4,10 +4,19 @@ import { MockDataflowRepository } from '../../infrastructure/storage/repositorie
 import { type DataflowDetails } from '../../shared/types/dashboard';
 import Loader from '../components/Loader';
 import Table from '../components/Table';
+import FilterBar from '../components/FilterBar';
+import { type ActiveFilter } from '../components/ActiveFilters';
 
 const dataflowRepository = new MockDataflowRepository();
 
 type TabType = 'executions' | 'datasets' | 'dependencies';
+
+const EXECUTION_STATUS_OPTIONS = [
+    { label: 'Todos os status', value: 'all' },
+    { label: 'OK', value: 'ok' },
+    { label: 'Alerta', value: 'alerta' },
+    { label: 'Erro', value: 'erro' }
+];
 
 const executionsColNames = ['Timestamp', 'Usuário', 'Duração', 'Tasks', 'Status'];
 const executionsColumns = [
@@ -64,6 +73,8 @@ function Details() {
     const [dataflow, setDataflow] = useState<DataflowDetails | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [activeTab, setActiveTab] = useState<TabType>('executions');
+    const [executionSearchTerm, setExecutionSearchTerm] = useState<string>('');
+    const [executionStatusFilter, setExecutionStatusFilter] = useState<string>('all');
 
     useEffect(() => {
         const loadData = async () => {
@@ -99,6 +110,54 @@ function Details() {
     }
 
     const statusConfig = getStatusConfig(dataflow.status);
+
+    // Filtragem das execuções
+    const filteredExecutions = dataflow.recentExecutions
+        .map(exec => ({
+            ...exec,
+            status: exec.status === 'warning' ? 'alerta' : exec.status === 'error' ? 'erro' : exec.status
+        }))
+        .filter(exec => {
+            const statusMatch = executionStatusFilter === 'all' || exec.status === executionStatusFilter;
+            const searchLower = executionSearchTerm.toLowerCase();
+            const searchMatch = executionSearchTerm === '' ||
+                exec.timestamp.toLowerCase().includes(searchLower) ||
+                exec.user.toLowerCase().includes(searchLower) ||
+                exec.duration.toLowerCase().includes(searchLower) ||
+                exec.tasks.toLowerCase().includes(searchLower);
+            return statusMatch && searchMatch;
+        });
+
+    // Filtros ativos para execuções
+    const getStatusLabel = (value: string) => {
+        const option = EXECUTION_STATUS_OPTIONS.find(opt => opt.value === value);
+        return option?.label || value;
+    };
+
+    const executionActiveFilters: ActiveFilter[] = [];
+
+    if (executionSearchTerm) {
+        executionActiveFilters.push({
+            id: 'search',
+            label: 'Busca',
+            value: executionSearchTerm,
+            onRemove: () => setExecutionSearchTerm('')
+        });
+    }
+
+    if (executionStatusFilter !== 'all') {
+        executionActiveFilters.push({
+            id: 'status',
+            label: 'Status',
+            value: getStatusLabel(executionStatusFilter),
+            onRemove: () => setExecutionStatusFilter('all')
+        });
+    }
+
+    const handleClearExecutionFilters = () => {
+        setExecutionSearchTerm('');
+        setExecutionStatusFilter('all');
+    };
 
     return (
         <div className='flex flex-col items-center p-6 w-full h-full'>
@@ -202,21 +261,33 @@ function Details() {
 
                     <div className="p-6">
                         {activeTab === 'executions' && (
-                            <div>
-                                <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-lg font-semibold text-gray-900">Execuções Recentes</h3>
-                                    <button className="px-4 py-2 text-sm border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 cursor-pointer">
-                                        Filtrar
-                                    </button>
-                                </div>
+                            <div className="space-y-4">
+                                <h3 className="text-lg font-semibold text-gray-900">Execuções Recentes</h3>
+
+                                <FilterBar
+                                    search={{
+                                        value: executionSearchTerm,
+                                        onChange: setExecutionSearchTerm,
+                                        placeholder: "Buscar execuções...",
+                                        flex: 2
+                                    }}
+                                    dropdowns={[
+                                        {
+                                            id: 'status',
+                                            options: EXECUTION_STATUS_OPTIONS,
+                                            value: executionStatusFilter,
+                                            onChange: setExecutionStatusFilter,
+                                            flex: 1
+                                        }
+                                    ]}
+                                    activeFilters={executionActiveFilters}
+                                    onClearAll={handleClearExecutionFilters}
+                                />
 
                                 <Table
                                     colNames={executionsColNames}
                                     columns={executionsColumns}
-                                    data={dataflow.recentExecutions.map(exec => ({
-                                        ...exec,
-                                        status: exec.status === 'warning' ? 'alerta' : exec.status === 'error' ? 'erro' : exec.status
-                                    }))}
+                                    data={filteredExecutions}
                                 />
                             </div>
                         )}
